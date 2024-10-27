@@ -10,8 +10,14 @@ import pyqtgraph as pg
 
 from model.signal_model import Signal
 
+from controller.error_plot_controller import ErrorPlotController
+from controller.frequency_plot_controller import  FrequencyPlotController
+from controller.sampling_controller import SamplingController
+
+
 # temporary hard coded signal data
 from data.temporary_signal import (hard_coded_x_data , hard_coded_y_data)
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -35,6 +41,10 @@ class MainWindow(QMainWindow):
 
         self.main_layout.addLayout(self.graph_layout, 4)
         self.main_layout.addLayout(self.control_layout, 1)
+
+        self.sampling_controller = SamplingController(self)
+        self.error_plot_controller = ErrorPlotController(self)
+        self.frequency_plot_controller = FrequencyPlotController(self)
 
     def create_signal_display(self):
         self.graph_layout = QVBoxLayout()
