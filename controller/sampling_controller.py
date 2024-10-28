@@ -14,6 +14,7 @@ class SamplingController:
         self.main.displayed_signal.change_sampling_freq(value)
         
         self.main.original_signal_plot.clear()
+        self.main.reconstructed_signal_plot.clear()
         # Plot the original signal
         sampled_points = self.main.displayed_signal.sampled_points
         x_values, y_values_sampled = zip(*sampled_points)
@@ -26,4 +27,5 @@ class SamplingController:
                 name="sample_markers",
             )
         self.main.original_signal_plot.addItem(sample_markers)
+        self.main.reconstructed_signal_plot.plot(x_values, y_values_sampled, pen="r", name="Reconstructed Signal")
         self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")

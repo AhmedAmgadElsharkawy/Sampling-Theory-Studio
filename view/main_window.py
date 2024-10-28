@@ -59,6 +59,7 @@ class MainWindow(QMainWindow):
                 name="sample_markers",
             )
         self.original_signal_plot.addItem(sample_markers)
+        self.reconstructed_signal_plot.plot(x_values, y_values_sampled, pen="r", name="Reconstructed Signal")
         self.original_signal_plot.plot(self.displayed_signal.x_data, self.displayed_signal.y_data, pen='r', name="Original Signal")
 
     def create_signal_display(self):
@@ -99,7 +100,7 @@ class MainWindow(QMainWindow):
         self.sampling_freq_label.setFont(font)
         self.sampling_freq_label.setStyleSheet("color: white;")
         self.sampling_freq_slider = QSlider(Qt.Orientation.Horizontal)
-        self.sampling_freq_slider.setRange(1, 248)
+        self.sampling_freq_slider.setRange(1, 100)
         self.sampling_freq_slider.setValue(0)
         self.sampling_freq_slider.setTickPosition(QSlider.TickPosition.NoTicks)
         self.sampling_freq_layout.addWidget(self.sampling_freq_label)
