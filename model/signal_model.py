@@ -48,6 +48,16 @@ class Signal:
         for noise in noisy:
             noisy_signal += noise
         return noisy_signal
-        
-        
     
+    def whittaker_shannon_interpolation(self, x, y, x_new, T=1):
+        x = np.asarray(x)
+        y = np.asarray(y)
+        x_new = np.asarray(x_new)
+
+        # Calculate the sinc matrix
+        sinc_matrix = np.sinc((x - x_new[:, None]) / T)
+
+        # Perform the interpolation
+        y_new = np.dot(y, sinc_matrix)
+
+        return y_new

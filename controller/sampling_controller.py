@@ -1,4 +1,5 @@
 import pyqtgraph as pg
+import numpy as np
 class SamplingController:
     def __init__(self,main):
         self.main = main
@@ -25,5 +26,6 @@ class SamplingController:
                 name="sample_markers",
             )
         self.main.original_signal_plot.addItem(sample_markers)
-        self.main.reconstructed_signal_plot.plot(x_values, y_values_sampled, pen="r", name="Reconstructed Signal")
+        interpolate = self.main.displayed_signal.whittaker_shannon_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values, 1 / self.main.displayed_signal.sampling_freq)
+        self.main.reconstructed_signal_plot.plot(self.main.displayed_signal.x_data, interpolate, pen="r", name="Reconstructed Signal")
         self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")
