@@ -24,6 +24,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.signals = []
         self.displayed_signal = Signal()
+        self.interpolation_method = "Whittaker-Shannon"
 
         # Set temporary hard coded signal data
         self.displayed_signal.x_data = hard_coded_x_data
@@ -38,13 +39,14 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
         self.main_layout = QHBoxLayout(self.main_widget)
 
+        self.sampling_controller = SamplingController(self)
+
         self.create_signal_display()
         self.create_control_panel()
 
         self.main_layout.addLayout(self.graph_layout, 4)
         self.main_layout.addLayout(self.control_layout, 1)
 
-        self.sampling_controller = SamplingController(self)
         self.error_plot_controller = ErrorPlotController(self)
         self.frequency_plot_controller = FrequencyPlotController(self)
         self.original_signal_plot.clear()
@@ -69,9 +71,6 @@ class MainWindow(QMainWindow):
         self.graph_layout.addWidget(self.reconstructed_signal_plot)
         self.graph_layout.addWidget(self.error_signal_plot)
         self.graph_layout.addWidget(self.frequency_domain_plot)
-
-
-
 
     def create_control_panel(self):
         self.control_layout = QVBoxLayout()
@@ -114,7 +113,9 @@ class MainWindow(QMainWindow):
         )
         self.reconstruction_method_layout = QVBoxLayout(self.reconstruction_method_group)
         self.reconstruction_combo = QComboBox()
-        self.reconstruction_combo.addItems(["Whittaker-Shannon", "Linear", "Spline"])
+        self.reconstruction_combo.addItems(["Whittaker-Shannon", "Linear", "CubicSpline"])
+        
+        self.reconstruction_combo.currentIndexChanged.connect(self.sampling_controller.change_reconstruction_method)
         
         self.reconstruction_method_layout.addWidget(self.reconstruction_combo)
 
@@ -222,4 +223,3 @@ class MainWindow(QMainWindow):
         # Call the method in SamplingController
         self.snr_label.setText(f"{self.snr_label.text().split(':')[0]}: {value}")
         self.sampling_controller.change_SNR(value)
-

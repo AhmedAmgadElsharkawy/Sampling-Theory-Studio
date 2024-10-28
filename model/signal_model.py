@@ -1,5 +1,6 @@
 import numpy as np
 from diffpy.utils.parsers.resample import wsinterp
+from scipy.interpolate import CubicSpline
 class Signal:
     def __init__(self):
         self.x_data = []
@@ -70,5 +71,19 @@ class Signal:
 
         # Perform linear interpolation using numpy's interp function
         y_new = np.interp(x, x_new, y)
+
+        return y_new
+    
+    def spline_interpolation(self, x, y, x_new):
+        """Perform cubic spline interpolation to estimate y values at x_new based on sampled x and y."""
+        x = np.asarray(x)
+        y = np.asarray(y)
+        x_new = np.asarray(x_new)
+        
+        # Create a cubic spline interpolation function
+        cs = CubicSpline(x_new, y)
+
+        # Evaluate the spline at the new x values
+        y_new = cs(x)
 
         return y_new
