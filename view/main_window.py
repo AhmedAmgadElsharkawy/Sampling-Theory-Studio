@@ -28,6 +28,7 @@ class MainWindow(QMainWindow):
         # Set temporary hard coded signal data
         self.displayed_signal.x_data = hard_coded_x_data
         self.displayed_signal.y_data = hard_coded_y_data
+        self.displayed_signal.max_frequency = 62
         self.displayed_signal.original_y = hard_coded_y_data
         
         self.setWindowTitle('Sampling Theory Studio')
