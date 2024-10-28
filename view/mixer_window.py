@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,QApplication,QLineEdit,QLabel
+    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,QApplication,QLineEdit,QLabel,QScrollArea,QPushButton
 )
 import pyqtgraph as pg
 
@@ -55,28 +55,36 @@ class MixerWindow(QMainWindow):
         self.phase_shift_prop_container_layout.addWidget(self.phase_shift_input_field_label)
         self.phase_shift_prop_container_layout.addWidget(self.phase_shift_input_field)
         
+        self.add_component_button_layout = QHBoxLayout()
+        self.add_component_button = QPushButton("Add Component")
+        self.add_component_button.setEnabled(False)
+        self.add_component_button_layout.addStretch()
+        self.add_component_button_layout.addWidget(self.add_component_button)
+        self.add_component_button.setStyleSheet("padding:3px 8px")
+        
         self.props_layout.addWidget(self.amplitude_prop_container_widget)
         self.props_layout.addWidget(self.frequency_prop_container_widget)
         self.props_layout.addWidget(self.phase_shift_prop_container_widget)
+        self.props_layout.addLayout(self.add_component_button_layout)
 
-
-        
-        
-
-
-
+        self.amplitude_input_field.textChanged.connect(self.enable_disable_add_component_button)
+        self.frequency_input_field.textChanged.connect(self.enable_disable_add_component_button)
+        self.phase_shift_input_field.textChanged.connect(self.enable_disable_add_component_button)
 
         self.components_widget = QWidget()
         self.components_layout = QVBoxLayout()
         self.components_widget.setLayout(self.components_layout)
 
         self.components_label = QLabel("Components")
+        self.components_scroll_area = QScrollArea()
+        self.components_scroll_area.setWidgetResizable(True)
         self.components_list_widget = QWidget()
         self.components_list_layout = QVBoxLayout()
         self.components_list_widget.setLayout(self.components_list_layout)
+        self.components_scroll_area.setWidget(self.components_list_widget)
 
         self.components_layout.addWidget(self.components_label)
-        self.components_layout.addWidget(self.components_list_widget)
+        self.components_layout.addWidget(self.components_scroll_area)
 
 
         
@@ -98,7 +106,9 @@ class MixerWindow(QMainWindow):
 
         
 
-        
-
-
+    def enable_disable_add_component_button(self):
+        if self.frequency_input_field.text() == "" or self.amplitude_input_field.text() == "" or self.phase_shift_input_field.text() == "":
+            self.add_component_button.setEnabled(False)
+        else:
+            self.add_component_button.setEnabled(True)
 
