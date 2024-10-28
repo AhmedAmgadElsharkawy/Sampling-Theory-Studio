@@ -61,3 +61,9 @@ class Signal:
         y_new = np.dot(y, sinc_matrix)
 
         return y_new
+    
+    def lagrange_interpolation(self, x_points, y_points, x):
+        """Perform Lagrange interpolation."""
+        amplitude_linear = np.interp(x_points, y_points, x)
+        print(amplitude_linear)
+        return amplitude_linear
