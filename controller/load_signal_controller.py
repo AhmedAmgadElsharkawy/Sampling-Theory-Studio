@@ -32,6 +32,8 @@ class LoadSignalController:
     
     def add_signal_to_signals_scroll_area(self,signal_name,signal):
         signal_item = SignalItem(self.main,signal,signal_name)
+        if(self.main.scroll_area_widget_layout.count() == 0):
+            signal_item.show_signal()
         self.main.scroll_area_widget_layout.addWidget(signal_item)
 
 class SignalItem(QWidget):
@@ -47,13 +49,22 @@ class SignalItem(QWidget):
         self.signal_label.setFont(font)
         self.signal_label.setStyleSheet("color: white; background: transparent; border: none;")
 
-        self.eye_button = QPushButton()
-        if(self.main.scroll_area_widget_layout.count() == 0):
-            self.eye_button.setIcon(QIcon("assets/icons/show.svg"))
-        else:
-            self.eye_button.setIcon(QIcon("assets/icons/hide.svg"))
-        self.eye_button.setFixedSize(30, 30)
-        self.eye_button.setStyleSheet("""
+        self.eye_button_show = QPushButton()
+        self.eye_button_hide = QPushButton()
+        self.eye_button_show.setIcon(QIcon("assets/icons/show.svg"))
+        self.eye_button_hide.setIcon(QIcon("assets/icons/hide.svg"))
+        self.eye_button_show.setFixedSize(30, 30)
+        self.eye_button_hide.setFixedSize(30, 30)
+        self.eye_button_show.setStyleSheet("""
+            QPushButton {
+                border: none;
+                background: transparent;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+            }
+        """)
+        self.eye_button_hide.setStyleSheet("""
             QPushButton {
                 border: none;
                 background: transparent;
@@ -78,9 +89,26 @@ class SignalItem(QWidget):
 
         self.signal_layout.addWidget(self.signal_label)
         self.signal_layout.addStretch()
-        self.signal_layout.addWidget(self.eye_button)
+        self.signal_layout.addWidget(self.eye_button_show)
+        self.signal_layout.addWidget(self.eye_button_hide)
+        self.eye_button_show.setVisible(False)
         self.signal_layout.addWidget(self.trash_button)
 
+        self.eye_button_hide.clicked.connect(self.show_signal)
+
+    def show_signal(self):
+        self.hide_signals()
+        self.eye_button_hide.setVisible(False)
+        self.eye_button_show.setVisible(True)
+        self.main.displayed_signal = self.signal
+    
+
+    def hide_signals(self):
+        for i in range(self.main.scroll_area_widget_layout.count()):
+            signalItem = self.main.scroll_area_widget_layout.itemAt(i).widget()
+            signalItem.eye_button_hide.setVisible(True)
+            signalItem.eye_button_show.setVisible(False)
+            
         
 
 

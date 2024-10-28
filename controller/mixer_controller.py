@@ -19,6 +19,7 @@ class MixerController:
     def add_signal(self):
         self.main.load_signal_controller.add_signal_to_signals_scroll_area(f"custom_signal_{self.main.scroll_area_widget_layout.count()}",self.mixed_signal)
         self.close_mixer()
+        
     def close_mixer(self):
         self.mixer_window.accept() 
 
