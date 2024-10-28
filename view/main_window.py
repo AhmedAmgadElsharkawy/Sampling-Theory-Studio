@@ -52,8 +52,13 @@ class MainWindow(QMainWindow):
         self.frequency_plot_controller = FrequencyPlotController(self)
         self.mixer_controller = MixerController(self)
         self.load_signal_controller = LoadSignalController(self)
+
+        self.signal_mixer_button.clicked.connect(self.open_mixer_window)
         
 
+    def open_mixer_window(self):
+        self.mixer_window = MixerWindow()
+        self.mixer_window.show()
 
     def create_signal_display(self):
         self.graph_layout = QVBoxLayout()

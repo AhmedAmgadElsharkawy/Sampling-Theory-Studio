@@ -4,8 +4,9 @@ from PyQt6.QtWidgets import (
 )
 import pyqtgraph as pg
 
-# from controller.mixer_controller import MixerController
+from controller.mixer_controller import MixerController
 from model.signal_model import Signal
+from PyQt6.QtCore import Qt
 
 
 
@@ -20,9 +21,14 @@ class MixerWindow(QMainWindow):
         self.setCentralWidget(self.main_widget)
         self.main_layout = QVBoxLayout(self.main_widget)
 
+
         self.mix_output_signal_plot = pg.PlotWidget()
         self.mix_output_signal_curve = self.mix_output_signal_plot.plot(pen = 'r')
         
+        self.props_and_components_and_buttons_container_widget = QWidget()
+        self.props_and_components_and_buttons_container_layout = QHBoxLayout()
+        self.props_and_components_and_buttons_container_widget.setLayout(self.props_and_components_and_buttons_container_layout)
+
         self.props_and_components_container_widget = QWidget()
         self.props_and_components_container_layout = QHBoxLayout()
         self.props_and_components_container_widget.setLayout(self.props_and_components_container_layout)
@@ -88,22 +94,32 @@ class MixerWindow(QMainWindow):
 
 
         
+        self.buttons_container_widget = QWidget()
+        self.buttons_container_layout = QVBoxLayout()
+        self.buttons_container_widget.setLayout(self.buttons_container_layout)
+        self.buttons_container_layout.setAlignment(Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
+        self.add_signal_button = QPushButton("Add Signal")
+        self.reset_button = QPushButton("Reset")
+        self.cancel_push_button = QPushButton("Cancel")
+        self.buttons_container_layout.addWidget(self.add_signal_button)
+        self.buttons_container_layout.addWidget(self.reset_button)
+        self.buttons_container_layout.addWidget(self.cancel_push_button)
+        
 
-
-
-
+        
 
 
         self.props_and_components_container_layout.addWidget(self.props_widget)
         self.props_and_components_container_layout.addWidget(self.components_widget)
 
-
+        
+        self.props_and_components_and_buttons_container_layout.addWidget(self.props_and_components_container_widget)
+        self.props_and_components_and_buttons_container_layout.addWidget(self.buttons_container_widget)
         self.main_layout.addWidget(self.mix_output_signal_plot)
-        self.main_layout.addWidget(self.props_and_components_container_widget)
+        self.main_layout.addWidget(self.props_and_components_and_buttons_container_widget)
         
 
-        # self.mixer_controller = MixerController(self)
-
+        self.mixer_controller = MixerController(self)
         
 
     def enable_disable_add_component_button(self):
