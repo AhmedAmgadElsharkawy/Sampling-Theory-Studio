@@ -28,6 +28,7 @@ class MainWindow(QMainWindow):
         # Set temporary hard coded signal data
         self.displayed_signal.x_data = hard_coded_x_data
         self.displayed_signal.y_data = hard_coded_y_data
+        self.displayed_signal.max_frequency = 62
         
         self.setWindowTitle('Sampling Theory Studio')
         self.setGeometry(100, 100, 1400, 900)
@@ -45,6 +46,7 @@ class MainWindow(QMainWindow):
         self.sampling_controller = SamplingController(self)
         self.error_plot_controller = ErrorPlotController(self)
         self.frequency_plot_controller = FrequencyPlotController(self)
+
 
     def create_signal_display(self):
         self.graph_layout = QVBoxLayout()
