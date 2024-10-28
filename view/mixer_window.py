@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import (
 import pyqtgraph as pg
 
 # from controller.mixer_controller import MixerController
-from signal import Signal
+from model.signal_model import Signal
 
 
 
@@ -100,13 +100,5 @@ class MixerWindow(QMainWindow):
 
         
 
-def main():
-    app = QApplication(sys.argv)
-    main_window = MixerWindow()
-    main_window.show()
-    sys.exit(app.exec())
 
-if __name__ == "__main__":
-    main()
-   
 

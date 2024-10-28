@@ -18,6 +18,8 @@ from controller.sampling_controller import SamplingController
 # temporary hard coded signal data
 from data.temporary_signal import (hard_coded_x_data , hard_coded_y_data)
 
+from view.mixer_window import MixerWindow
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -45,6 +47,13 @@ class MainWindow(QMainWindow):
         self.sampling_controller = SamplingController(self)
         self.error_plot_controller = ErrorPlotController(self)
         self.frequency_plot_controller = FrequencyPlotController(self)
+        
+        self.signal_mixer_button.clicked.connect(self.open_mixer_window)
+
+    def open_mixer_window(self):
+        self.mixer_window = MixerWindow()
+        self.mixer_window.show()
+        
 
     def create_signal_display(self):
         self.graph_layout = QVBoxLayout()
