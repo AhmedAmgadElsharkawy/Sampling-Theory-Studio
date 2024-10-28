@@ -13,6 +13,7 @@ class SamplingController:
         self.main.displayed_signal.change_sampling_freq(value)
         
         self.main.original_signal_plot.clear()
+        self.main.error_signal_plot.clear()
         self.main.reconstructed_signal_plot.clear()
         # Plot the original signal
         sampled_points = self.main.displayed_signal.sampled_points
@@ -32,6 +33,9 @@ class SamplingController:
             interpolate = self.main.displayed_signal.linear_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values)
         else :
             interpolate = self.main.displayed_signal.whittaker_shannon_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values, 1 / self.main.displayed_signal.sampling_freq)
+        error = np.array(self.main.displayed_signal.y_data) - interpolate
+        self.main.error_signal_plot.plot(self.main.displayed_signal.x_data, error, pen="r", name="Error Signal")
+        self.main.error_signal_plot.setYRange(-2, 2)
         self.main.reconstructed_signal_plot.plot(self.main.displayed_signal.x_data, interpolate, pen="r", name="Reconstructed Signal")
         self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")
 
