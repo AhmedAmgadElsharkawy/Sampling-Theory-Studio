@@ -36,6 +36,10 @@ class LoadSignalController:
             signal_item.show_signal()
         self.main.scroll_area_widget_layout.addWidget(signal_item)
 
+        
+      
+
+
 class SignalItem(QWidget):
     def __init__(self,main,signal,signal_name):
         super().__init__()
@@ -95,6 +99,7 @@ class SignalItem(QWidget):
         self.signal_layout.addWidget(self.trash_button)
 
         self.eye_button_hide.clicked.connect(self.show_signal)
+        self.trash_button.clicked.connect(self.delete_signal)
 
     def show_signal(self):
         self.hide_signals()
@@ -108,6 +113,14 @@ class SignalItem(QWidget):
             signalItem = self.main.scroll_area_widget_layout.itemAt(i).widget()
             signalItem.eye_button_hide.setVisible(True)
             signalItem.eye_button_show.setVisible(False)
+
+    def delete_signal(self):
+        self.main.scroll_area_widget_layout.removeWidget(self)
+        if(self.main.scroll_area_widget_layout.count() == 0):
+            self.main.mixed_signal = Signal()
+        else:
+            self.main.scroll_area_widget_layout.itemAt(0).widget().show_signal()
+        self.deleteLater()
             
         
 
