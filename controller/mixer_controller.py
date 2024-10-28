@@ -3,12 +3,24 @@ from model.component_model import Component
 from PyQt6.QtWidgets import QWidget,QHBoxLayout,QLabel,QPushButton
 from PyQt6.QtGui import QIcon
 
+from controller.load_signal_controller import LoadSignalController
+
 
 class MixerController:
-    def __init__(self,mixer_window):
+    def __init__(self,mixer_window,main):
+        self.main = main
         self.mixer_window = mixer_window
         self.mixed_signal = mixer_window.mixed_signal
         self.mixer_window.add_component_button.clicked.connect(self.add_component)
+        self.mixer_window.add_signal_button.clicked.connect(self.add_signal)
+        self.mixer_window.cancel_push_button.clicked.connect(self.close_mixer)
+        
+
+    def add_signal(self):
+        self.main.load_signal_controller.add_signal_to_signals_scroll_area(f"custom_signal_{self.main.scroll_area_widget_layout.count()}",self.mixed_signal)
+        self.close_mixer()
+    def close_mixer(self):
+        self.mixer_window.accept() 
 
     def add_component(self):
         component = Component(frequency=float(self.mixer_window.frequency_input_field.text())
@@ -59,7 +71,7 @@ class ComponentItem(QWidget):
         self.component_name_label = QLabel(f"compnent{self.mixer_window.components_list_layout.count()} ({self.component.amplitude}, {self.component.frequency}, {self.component.phase_shift})")
         self.trash_button = QPushButton()
         self.trash_button.setIcon(QIcon("assets/icons/delete.svg"))
-        self.trash_button.setFixedSize(30, 30)
+        self.trash_button.setFixedSize(15, 15)
         self.component_item_layout.addWidget(self.component_name_label)
         self.component_item_layout.addStretch()
         self.component_item_layout.addWidget(self.trash_button)

@@ -15,12 +15,13 @@ from PyQt6.QtWidgets import QDialog
 
 
 class MixerWindow(QDialog):
-    def __init__(self):
+    def __init__(self,main):
         super().__init__()
+        self.main = main
         self.mixed_signal = Signal()
         self.components_list = []
         self.setWindowTitle('Signals Mixer')
-        self.setGeometry(300, 200, 800, 500)
+        self.setGeometry(300, 200, 800, 600)
         self.is_dark_mode = True
         # self.main_widget = QWidget(self)
         # self.setCentralWidget(self.main_widget)
@@ -38,6 +39,7 @@ class MixerWindow(QDialog):
 
         self.props_and_components_container_widget = QWidget()
         self.props_and_components_container_widget.setFixedWidth(600)
+        self.props_and_components_container_widget.setFixedHeight(250) 
         self.props_and_components_container_layout = QHBoxLayout()
         self.props_and_components_container_widget.setLayout(self.props_and_components_container_layout)
         
@@ -85,6 +87,7 @@ class MixerWindow(QDialog):
         self.props_layout.addWidget(self.amplitude_prop_container_widget)
         self.props_layout.addWidget(self.frequency_prop_container_widget)
         self.props_layout.addWidget(self.phase_shift_prop_container_widget)
+        self.props_layout.addStretch()
         self.props_layout.addLayout(self.add_component_button_layout)
 
         self.amplitude_input_field.textChanged.connect(self.enable_disable_add_component_button)
@@ -100,6 +103,8 @@ class MixerWindow(QDialog):
         self.components_scroll_area.setWidgetResizable(True)
         self.components_list_widget = QWidget()
         self.components_list_layout = QVBoxLayout()
+        self.components_list_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.components_list_layout.setSpacing(0)
         self.components_list_widget.setLayout(self.components_list_layout)
         self.components_scroll_area.setWidget(self.components_list_widget)
 
@@ -134,7 +139,7 @@ class MixerWindow(QDialog):
         self.main_layout.addWidget(self.props_and_components_and_buttons_container_widget)
         
 
-        self.mixer_controller = MixerController(self)
+        self.mixer_controller = MixerController(self,main)
         
 
     def enable_disable_add_component_button(self):

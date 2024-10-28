@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
         
 
     def open_mixer_window(self):
-        self.mixer_window = MixerWindow()
+        self.mixer_window = MixerWindow(self)
         self.mixer_window.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.mixer_window.show()
 
