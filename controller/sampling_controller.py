@@ -5,10 +5,8 @@ class SamplingController:
 
     def change_SNR(self, value):
         self.main.displayed_signal.change_snr(value)
-        
-        self.main.original_signal_plot.clear()
-        # Plot the original signal
-        self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")
+
+        self.change_sampling_freq(self.main.displayed_signal.sampling_freq)
     
     def change_sampling_freq(self, value):
         self.main.displayed_signal.change_sampling_freq(value)
