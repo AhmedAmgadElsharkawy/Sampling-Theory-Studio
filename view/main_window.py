@@ -28,6 +28,7 @@ class MainWindow(QMainWindow):
         # Set temporary hard coded signal data
         self.displayed_signal.x_data = hard_coded_x_data
         self.displayed_signal.y_data = hard_coded_y_data
+        self.displayed_signal.original_y = hard_coded_y_data
         
         self.setWindowTitle('Sampling Theory Studio')
         self.setGeometry(100, 100, 1400, 900)
@@ -45,6 +46,8 @@ class MainWindow(QMainWindow):
         self.sampling_controller = SamplingController(self)
         self.error_plot_controller = ErrorPlotController(self)
         self.frequency_plot_controller = FrequencyPlotController(self)
+        self.original_signal_plot.clear()
+        self.original_signal_plot.plot(self.displayed_signal.x_data, self.displayed_signal.y_data, pen='r', name="Original Signal")
 
     def create_signal_display(self):
         self.graph_layout = QVBoxLayout()
@@ -93,12 +96,12 @@ class MainWindow(QMainWindow):
         self.snr_group = QGroupBox()
         self.snr_group.setStyleSheet("border: none; padding: 5px;")
         self.snr_layout = QVBoxLayout(self.snr_group)
-        self.snr_label = QLabel("Signal-to-Noise Ratio (dB): 10")
+        self.snr_label = QLabel("Signal-to-Noise Ratio (dB): 50")
         self.snr_label.setFont(font)
         self.snr_label.setStyleSheet("color: white;")
         self.snr_slider = QSlider(Qt.Orientation.Horizontal)
-        self.snr_slider.setRange(0, 30)
-        self.snr_slider.setValue(10)
+        self.snr_slider.setRange(1, 50)
+        self.snr_slider.setValue(50)
         self.snr_slider.setTickPosition(QSlider.TickPosition.NoTicks)
         self.snr_layout.addWidget(self.snr_label)
         self.snr_layout.addWidget(self.snr_slider)
@@ -195,7 +198,7 @@ class MainWindow(QMainWindow):
         self.placeholder_layout.setAlignment(self.signal_layout, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
         self.sampling_freq_slider.valueChanged.connect(lambda: self.update_label(self.sampling_freq_label, self.sampling_freq_slider.value()))
-        self.snr_slider.valueChanged.connect(lambda: self.update_label(self.snr_label, self.snr_slider.value()))
+        self.snr_slider.valueChanged.connect(self.handle_snr_change)
 
         self.control_group_layout.addWidget(self.sampling_freq_group)
         self.control_group_layout.addWidget(self.snr_group)
@@ -207,4 +210,9 @@ class MainWindow(QMainWindow):
 
     def update_label(self, label, value):
         label.setText(f"{label.text().split(':')[0]}: {value}")
+
+    def handle_snr_change(self, value):
+        # Call the method in SamplingController
+        self.snr_label.setText(f"{self.snr_label.text().split(':')[0]}: {value}")
+        self.sampling_controller.changeSNR(value)
 
