@@ -26,6 +26,6 @@ class SamplingController:
                 name="sample_markers",
             )
         self.main.original_signal_plot.addItem(sample_markers)
-        interpolate = self.main.displayed_signal.lagrange_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values)
+        interpolate = self.main.displayed_signal.linear_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values)
         self.main.reconstructed_signal_plot.plot(self.main.displayed_signal.x_data, interpolate, pen="r", name="Reconstructed Signal")
         self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")

@@ -62,8 +62,13 @@ class Signal:
 
         return y_new
     
-    def lagrange_interpolation(self, x_points, y_points, x):
-        """Perform Lagrange interpolation."""
-        amplitude_linear = np.interp(x_points, y_points, x)
-        print(amplitude_linear)
-        return amplitude_linear
+    def linear_interpolation(self, x, y, x_new):
+        """Perform linear interpolation to estimate y values at x_new based on sampled x and y."""
+        x = np.asarray(x)
+        y = np.asarray(y)
+        x_new = np.asarray(x_new)
+
+        # Perform linear interpolation using numpy's interp function
+        y_new = np.interp(x, x_new, y)
+
+        return y_new
