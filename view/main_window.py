@@ -95,12 +95,12 @@ class MainWindow(QMainWindow):
         self.sampling_freq_group = QGroupBox()
         self.sampling_freq_group.setStyleSheet("border: none; padding: 5px;")
         self.sampling_freq_layout = QVBoxLayout(self.sampling_freq_group)
-        self.sampling_freq_label = QLabel("Sampling Frequency (Hz): 300")
+        self.sampling_freq_label = QLabel("Sampling Frequency (Hz): 1")
         self.sampling_freq_label.setFont(font)
         self.sampling_freq_label.setStyleSheet("color: white;")
         self.sampling_freq_slider = QSlider(Qt.Orientation.Horizontal)
-        self.sampling_freq_slider.setRange(1, 300)
-        self.sampling_freq_slider.setValue(1000)
+        self.sampling_freq_slider.setRange(1, 248)
+        self.sampling_freq_slider.setValue(0)
         self.sampling_freq_slider.setTickPosition(QSlider.TickPosition.NoTicks)
         self.sampling_freq_layout.addWidget(self.sampling_freq_label)
         self.sampling_freq_layout.addWidget(self.sampling_freq_slider)
@@ -209,7 +209,7 @@ class MainWindow(QMainWindow):
 
         self.placeholder_layout.setAlignment(self.signal_layout, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
-        self.sampling_freq_slider.valueChanged.connect(lambda: self.update_label(self.sampling_freq_label, self.sampling_freq_slider.value()))
+        self.sampling_freq_slider.valueChanged.connect(self.change_sampling_freq)
         self.snr_slider.valueChanged.connect(self.handle_snr_change)
 
         self.control_group_layout.addWidget(self.sampling_freq_group)
@@ -223,8 +223,13 @@ class MainWindow(QMainWindow):
     def update_label(self, label, value):
         label.setText(f"{label.text().split(':')[0]}: {value}")
 
+    def change_sampling_freq(self, value):
+        # Call the method in SamplingController
+        self.sampling_freq_label.setText(f"{self.sampling_freq_label.text().split(':')[0]}: {value}")
+        self.sampling_controller.change_sampling_freq(value)
+
     def handle_snr_change(self, value):
         # Call the method in SamplingController
         self.snr_label.setText(f"{self.snr_label.text().split(':')[0]}: {value}")
-        self.sampling_controller.changeSNR(value)
+        self.sampling_controller.change_SNR(value)
 

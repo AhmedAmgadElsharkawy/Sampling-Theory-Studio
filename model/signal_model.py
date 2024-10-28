@@ -11,7 +11,7 @@ class Signal:
         self.max_frequency = None
         self.min_frequenncy = None
         self.SNR = 0
-        self.sampling_freq = 5
+        self.sampling_freq = 1
 
     def get_impulse_train(self):
         impulse_train = np.arange(0, self.x_data[-1], (1 / self.sampling_freq))
@@ -23,6 +23,10 @@ class Signal:
         y_values_sampled = np.zeros(len(impulse_train))
         y_values_sampled = wsinterp(impulse_train, self.x_data, self.y_data)
         self.sampled_points = list(zip(impulse_train, y_values_sampled))
+
+    def change_sampling_freq(self, new_sampling_freq):
+        self.sampling_freq = new_sampling_freq
+        self.sample_signal()
 
     def change_snr(self, new_snr):
         self.SNR = new_snr
