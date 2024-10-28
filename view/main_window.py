@@ -47,6 +47,18 @@ class MainWindow(QMainWindow):
         self.error_plot_controller = ErrorPlotController(self)
         self.frequency_plot_controller = FrequencyPlotController(self)
         self.original_signal_plot.clear()
+        self.displayed_signal.sample_signal()
+        sampled_points = self.displayed_signal.sampled_points
+        x_values, y_values_sampled = zip(*sampled_points)
+        sample_markers = pg.ScatterPlotItem(
+                x=x_values,
+                y=y_values_sampled,
+                pen=None,
+                symbol="x",
+                symbolPen="b",
+                name="sample_markers",
+            )
+        self.original_signal_plot.addItem(sample_markers)
         self.original_signal_plot.plot(self.displayed_signal.x_data, self.displayed_signal.y_data, pen='r', name="Original Signal")
 
     def create_signal_display(self):

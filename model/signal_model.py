@@ -1,4 +1,5 @@
 import numpy as np
+from diffpy.utils.parsers.resample import wsinterp
 class Signal:
     def __init__(self):
         self.x_data = []
@@ -6,9 +7,22 @@ class Signal:
         self.original_y = []
         self.components = []
         self.noise_samples = []
+        self.sampled_points = []
         self.max_frequency = None
         self.min_frequenncy = None
         self.SNR = 0
+        self.sampling_freq = 5
+
+    def get_impulse_train(self):
+        impulse_train = np.arange(0, self.x_data[-1], (1 / self.sampling_freq))
+        impulse_train = np.around(impulse_train, 3)
+        return impulse_train
+
+    def sample_signal(self):
+        impulse_train = self.get_impulse_train()
+        y_values_sampled = np.zeros(len(impulse_train))
+        y_values_sampled = wsinterp(impulse_train, self.x_data, self.y_data)
+        self.sampled_points = list(zip(impulse_train, y_values_sampled))
 
     def change_snr(self, new_snr):
         self.SNR = new_snr
