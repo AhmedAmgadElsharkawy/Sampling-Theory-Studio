@@ -25,8 +25,8 @@ from view.mixer_window import MixerWindow
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.signals_list = []
-        self.displayed_signal = Signal()
+        # self.signals_list = []
+        self.displayed_signal = None
         self.interpolation_method = "Whittaker-Shannon"
 
         # # Set temporary hard coded signal data
