@@ -104,8 +104,9 @@ class MainWindow(QMainWindow):
         self.sampling_freq_label.setFont(font)
         self.sampling_freq_label.setStyleSheet("color: white;")
         self.sampling_freq_slider = QSlider(Qt.Orientation.Horizontal)
-        self.sampling_freq_slider.setRange(1, 248)
-        self.sampling_freq_slider.setValue(0)
+        # self.sampling_freq_slider.setRange(1, 248)
+        # self.sampling_freq_slider.setValue(0)
+        self.sampling_freq_slider.setEnabled(False)
         self.sampling_freq_slider.setTickPosition(QSlider.TickPosition.NoTicks)
         self.sampling_freq_layout.addWidget(self.sampling_freq_label)
         self.sampling_freq_layout.addWidget(self.sampling_freq_slider)
@@ -119,6 +120,7 @@ class MainWindow(QMainWindow):
         self.snr_slider = QSlider(Qt.Orientation.Horizontal)
         self.snr_slider.setRange(1, 100)
         self.snr_slider.setValue(100)
+        self.snr_slider.setDisabled(True)
         self.snr_slider.setTickPosition(QSlider.TickPosition.NoTicks)
         self.snr_layout.addWidget(self.snr_label)
         self.snr_layout.addWidget(self.snr_slider)
@@ -130,7 +132,7 @@ class MainWindow(QMainWindow):
         self.reconstruction_method_layout = QVBoxLayout(self.reconstruction_method_group)
         self.reconstruction_combo = QComboBox()
         self.reconstruction_combo.addItems(["Whittaker-Shannon", "Linear", "CubicSpline"])
-        
+        self.reconstruction_combo.setEnabled(False)
         self.reconstruction_combo.currentIndexChanged.connect(self.sampling_controller.change_reconstruction_method)
         
         self.reconstruction_method_layout.addWidget(self.reconstruction_combo)

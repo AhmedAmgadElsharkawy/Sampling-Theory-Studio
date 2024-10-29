@@ -31,6 +31,7 @@ class MixerController:
         df = pd.DataFrame({
             'Elapsed Time': self.mixer_window.mixed_signal.x_data,
             'II': self.mixer_window.mixed_signal.y_data,
+            'MAX FREQUENCY': self.mixer_window.mixed_signal.max_frequency
         })
 
         filename = self.get_unique_filename("data/mixer_signals/mixed_signal.csv")

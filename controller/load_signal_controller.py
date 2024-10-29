@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import QFileDialog,QLabel,QPushButton,QHBoxLayout,QWidget,Q
 from PyQt6.QtGui import QIcon,QFont
 from model.signal_model import Signal
 from PyQt6.QtCore import Qt
+import math
 
 
 class LoadSignalController:
@@ -21,13 +22,11 @@ class LoadSignalController:
         if not file_path:
             pass
         data = pd.read_csv(file_path).iloc[:,:]
-        # self.x = data.iloc[:1000,0]
-        # self.y = data.iloc[:1000,1]
         signal = Signal()
         signal.x_data = list(data.iloc[:1000,0])
-        signal.y_data = list(data.iloc[:1000,-1])
-        signal.original_y = list(data.iloc[:1000,-1])
-        # self.main.signals_list.append(signal)
+        signal.y_data = list(data.iloc[:1000,1])
+        signal.original_y = list(data.iloc[:1000,1])
+        signal.max_frequency = float(data.iloc[0,2])
         signalName = os.path.splitext(os.path.basename(file_path))[0]
         self.add_signal_to_signals_scroll_area(signal_name = signalName,signal = signal)
     
@@ -109,6 +108,11 @@ class SignalItem(QWidget):
         self.main.displayed_signal = self.signal
         self.main.displayed_signal.sample_signal()
         self.main.sampling_controller.change_sampling_freq(1)
+        self.main.sampling_freq_slider.setEnabled(True)
+        self.main.sampling_freq_slider.setRange(1, int(math.ceil(4 * self.main.displayed_signal.max_frequency)))
+        self.main.sampling_freq_slider.setValue(1)
+        self.main.snr_slider.setEnabled(True)
+        self.main.reconstruction_combo.setEnabled(True)
     
 
     def hide_signals(self):
@@ -122,6 +126,9 @@ class SignalItem(QWidget):
         self.main.scroll_area_widget_layout.removeWidget(self)
         if(self.main.scroll_area_widget_layout.count() == 0):
             self.main.displayed_signal = None
+            self.main.sampling_freq_slider.setEnabled(False)
+            self.main.snr_slider.setEnabled(False)
+            self.main.reconstruction_combo.setEnabled(False)
         else:
             self.main.scroll_area_widget_layout.itemAt(0).widget().show_signal()
         self.deleteLater()
