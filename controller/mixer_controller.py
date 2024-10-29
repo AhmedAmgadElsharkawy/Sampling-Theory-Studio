@@ -117,7 +117,6 @@ class ComponentItem(QWidget):
 
     def delete_component_item(self):
         for cur_component in self.mixer_window.mixed_signal.components:
-            print("aaaaaaaaaaaah",cur_component.y_data)
         self.mixer_window.mixed_signal.components.remove(self.component)
                 
         if(len(self.mixer_window.mixed_signal.components) == 0):
