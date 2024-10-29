@@ -1,4 +1,6 @@
+import os
 import numpy as np
+import pandas as pd
 from model.component_model import Component
 from PyQt6.QtWidgets import QWidget,QHBoxLayout,QLabel,QPushButton
 from PyQt6.QtGui import QIcon
@@ -14,6 +16,25 @@ class MixerController:
         self.mixer_window.add_component_button.clicked.connect(self.add_component)
         self.mixer_window.add_signal_button.clicked.connect(self.add_signal)
         self.mixer_window.cancel_push_button.clicked.connect(self.close_mixer)
+        self.mixer_window.export_button.clicked.connect(self.export_signal_to_csv_file)
+        
+
+    def get_unique_filename(self,filename):
+        base, ext = os.path.splitext(filename)  # Split filename into base and extension
+        counter = 1
+        while os.path.exists(filename):
+            filename = f"{base}_{counter}{ext}"  # Create new filename
+            counter += 1
+        return filename
+
+    def export_signal_to_csv_file(self):
+        df = pd.DataFrame({
+            'Elapsed Time': self.mixer_window.mixed_signal.x_data,
+            'II': self.mixer_window.mixed_signal.y_data,
+        })
+
+        filename = self.get_unique_filename("data/mixer_signals/mixed_signal.csv")
+        df.to_csv(filename, index=False)
         
 
     def add_signal(self):
@@ -62,6 +83,7 @@ class MixerController:
        self.mixer_window.components_list_layout.addWidget(component_item)
        if(self.mixer_window.components_list_layout.count()):
            self.mixer_window.add_signal_button.setEnabled(True)
+           self.mixer_window.export_button.setEnabled(True)
 
 
 class ComponentItem(QWidget):
@@ -88,6 +110,7 @@ class ComponentItem(QWidget):
             self.mixer_window.mixed_signal.x_data = []
             self.mixer_window.mixed_signal.y_data = []
             self.mixer_window.add_signal_button.setEnabled(False)
+            self.mixer_window.export_button.setEnabled(False)
             # self.mixer_window.mixed_signal = None
         else:
             self.mixer_window.mixed_signal.y_data -= self.component.y_data
