@@ -44,4 +44,11 @@ class SamplingController:
         selected_option = self.main.reconstruction_combo.currentText()  # Get the selected text
         self.main.interpolation_method = selected_option
         self.change_sampling_freq(self.main.displayed_signal.sampling_freq)
+
+    def clear_plots(self):
+        self.main.original_signal_plot.clear()
+        self.main.reconstructed_signal_plot.clear()
+        self.main.error_signal_plot.clear()
+        self.main.frequency_domain_plot.clear()
+        
     

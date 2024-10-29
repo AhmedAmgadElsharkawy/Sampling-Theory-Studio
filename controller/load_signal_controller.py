@@ -20,12 +20,13 @@ class LoadSignalController:
     def add_signal(self, file_path):
         if not file_path:
             pass
-        data = pd.read_csv(file_path).iloc[:,0:2]
-        self.x = data.iloc[:,0]
-        self.y = data.iloc[:,1]
+        data = pd.read_csv(file_path).iloc[:,:]
+        # self.x = data.iloc[:1000,0]
+        # self.y = data.iloc[:1000,1]
         signal = Signal()
-        signal.x_data = data.iloc[:,0]
-        signal.y_data = data.iloc[:,1]
+        signal.x_data = list(data.iloc[:1000,0])
+        signal.y_data = list(data.iloc[:1000,-1])
+        signal.original_y = list(data.iloc[:1000,-1])
         # self.main.signals_list.append(signal)
         signalName = os.path.splitext(os.path.basename(file_path))[0]
         self.add_signal_to_signals_scroll_area(signal_name = signalName,signal = signal)
@@ -106,6 +107,8 @@ class SignalItem(QWidget):
         self.eye_button_hide.setVisible(False)
         self.eye_button_show.setVisible(True)
         self.main.displayed_signal = self.signal
+        self.main.displayed_signal.sample_signal()
+        self.main.sampling_controller.change_sampling_freq(1)
     
 
     def hide_signals(self):
@@ -115,6 +118,7 @@ class SignalItem(QWidget):
             signalItem.eye_button_show.setVisible(False)
 
     def delete_signal(self):
+        self.main.sampling_controller.clear_plots()
         self.main.scroll_area_widget_layout.removeWidget(self)
         if(self.main.scroll_area_widget_layout.count() == 0):
             self.main.mixed_signal = Signal()

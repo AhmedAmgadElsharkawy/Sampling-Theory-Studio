@@ -118,10 +118,10 @@ class MixerWindow(QDialog):
         self.buttons_container_widget.setLayout(self.buttons_container_layout)
         self.buttons_container_layout.setAlignment(Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
         self.add_signal_button = QPushButton("Add Signal")
-        self.reset_button = QPushButton("Reset")
+        # self.reset_button = QPushButton("Reset")
         self.cancel_push_button = QPushButton("Cancel")
         self.buttons_container_layout.addWidget(self.add_signal_button)
-        self.buttons_container_layout.addWidget(self.reset_button)
+        # self.buttons_container_layout.addWidget(self.reset_button)
         self.buttons_container_layout.addWidget(self.cancel_push_button)
         
 

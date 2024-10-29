@@ -44,6 +44,7 @@ class MixerController:
             self.mixed_signal.y_data = component.y_data
         else:
             self.mixed_signal.y_data += component.y_data
+        self.mixed_signal.original_y  = self.mixed_signal.y_data.copy()
 
         self.mixer_window.mixed_signal.components.append(component)
 
