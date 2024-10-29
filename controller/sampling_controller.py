@@ -36,6 +36,8 @@ class SamplingController:
         error = np.array(self.main.displayed_signal.y_data) - interpolate
         self.main.error_signal_plot.plot(self.main.displayed_signal.x_data, error, pen="r", name="Error Signal")
         self.main.error_signal_plot.setYRange(-2, 2)
+        print (interpolate)
+        self.main.frequency_plot_controller.plot_frequency_domain(interpolate)
         self.main.reconstructed_signal_plot.plot(self.main.displayed_signal.x_data, interpolate, pen="r", name="Reconstructed Signal")
         self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")
 
