@@ -85,6 +85,7 @@ class ComponentItem(QWidget):
         if(len(self.mixer_window.mixed_signal.components) == 0):
             self.mixer_window.mixed_signal.x_data = []
             self.mixer_window.mixed_signal.y_data = []
+            # self.mixer_window.mixed_signal = None
         else:
             self.mixer_window.mixed_signal.y_data -= self.component.y_data
 

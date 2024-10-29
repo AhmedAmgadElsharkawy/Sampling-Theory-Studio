@@ -121,7 +121,7 @@ class SignalItem(QWidget):
         self.main.sampling_controller.clear_plots()
         self.main.scroll_area_widget_layout.removeWidget(self)
         if(self.main.scroll_area_widget_layout.count() == 0):
-            self.main.mixed_signal = Signal()
+            self.main.displayed_signal = None
         else:
             self.main.scroll_area_widget_layout.itemAt(0).widget().show_signal()
         self.deleteLater()

@@ -50,5 +50,6 @@ class SamplingController:
         self.main.reconstructed_signal_plot.clear()
         self.main.error_signal_plot.clear()
         self.main.frequency_domain_plot.clear()
-        
+        self.main.displayed_signal = None
+
     
