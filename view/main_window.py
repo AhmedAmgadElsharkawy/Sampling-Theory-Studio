@@ -17,7 +17,7 @@ from controller.load_signal_controller import LoadSignalController
 
 
 # temporary hard coded signal data
-from data.temporary_signal import (hard_coded_x_data , hard_coded_y_data)
+# from data.temporary_signal import (hard_coded_x_data , hard_coded_y_data)
 
 from view.mixer_window import MixerWindow
 

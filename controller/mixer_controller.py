@@ -60,6 +60,8 @@ class MixerController:
     def add_component_item(self,component):
        component_item = ComponentItem(self.mixer_window,component) 
        self.mixer_window.components_list_layout.addWidget(component_item)
+       if(self.mixer_window.components_list_layout.count()):
+           self.mixer_window.add_signal_button.setEnabled(True)
 
 
 class ComponentItem(QWidget):
@@ -85,6 +87,7 @@ class ComponentItem(QWidget):
         if(len(self.mixer_window.mixed_signal.components) == 0):
             self.mixer_window.mixed_signal.x_data = []
             self.mixer_window.mixed_signal.y_data = []
+            self.mixer_window.add_signal_button.setEnabled(False)
             # self.mixer_window.mixed_signal = None
         else:
             self.mixer_window.mixed_signal.y_data -= self.component.y_data
