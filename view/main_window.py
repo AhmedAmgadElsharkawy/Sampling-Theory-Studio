@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
         self.main_widget = QWidget(self)
         self.setCentralWidget(self.main_widget)
         self.main_layout = QHBoxLayout(self.main_widget)
-
+        self.frequency_plot_controller = FrequencyPlotController(self)
         self.sampling_controller = SamplingController(self)
 
         self.create_signal_display()
@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
         self.error_plot_controller = ErrorPlotController(self)
         self.load_signal_controller = LoadSignalController(self)
         self.signal_mixer_button.clicked.connect(self.open_mixer_window)
-        self.frequency_plot_controller = FrequencyPlotController(self)
+        
         
 
 
@@ -134,7 +134,8 @@ class MainWindow(QMainWindow):
         self.reconstruction_combo.currentIndexChanged.connect(self.sampling_controller.change_reconstruction_method)
         
         self.reconstruction_method_layout.addWidget(self.reconstruction_combo)
-
+        
+        
         self.load_signal_button = QPushButton("Load Signal")
         self.load_signal_button.setFont(font)
         self.load_signal_button.setStyleSheet("""
