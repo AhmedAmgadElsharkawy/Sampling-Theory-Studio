@@ -2,7 +2,7 @@ import sys
 import numpy as np
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
-    QLabel, QSlider, QPushButton, QComboBox, QFrame, QGroupBox
+    QLabel, QSlider, QPushButton, QComboBox, QFrame, QGroupBox,QScrollArea
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
@@ -13,24 +13,27 @@ from model.signal_model import Signal
 from controller.error_plot_controller import ErrorPlotController
 from controller.frequency_plot_controller import  FrequencyPlotController
 from controller.sampling_controller import SamplingController
+from controller.load_signal_controller import LoadSignalController
 
 
 # temporary hard coded signal data
 from data.temporary_signal import (hard_coded_x_data , hard_coded_y_data)
 
+from view.mixer_window import MixerWindow
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.signals = []
+        self.signals_list = []
         self.displayed_signal = Signal()
         self.interpolation_method = "Whittaker-Shannon"
 
-        # Set temporary hard coded signal data
-        self.displayed_signal.x_data = hard_coded_x_data
-        self.displayed_signal.y_data = hard_coded_y_data
-        self.displayed_signal.max_frequency = 62
-        self.displayed_signal.original_y = hard_coded_y_data
+        # # Set temporary hard coded signal data
+        # self.displayed_signal.x_data = hard_coded_x_data
+        # self.displayed_signal.y_data = hard_coded_y_data
+        # self.displayed_signal.max_frequency = 62
+        # self.displayed_signal.original_y = hard_coded_y_data
         
         self.setWindowTitle('Sampling Theory Studio')
         self.setGeometry(100, 100, 1400, 900)
@@ -48,12 +51,24 @@ class MainWindow(QMainWindow):
         self.main_layout.addLayout(self.control_layout, 1)
 
         self.error_plot_controller = ErrorPlotController(self)
-        self.frequency_plot_controller = FrequencyPlotController(self) 
-        self.original_signal_plot.clear()
-        self.displayed_signal.sample_signal()
-        self.sampling_controller.change_sampling_freq(1)
-         
-    
+        self.load_signal_controller = LoadSignalController(self)
+        self.signal_mixer_button.clicked.connect(self.open_mixer_window)
+        self.frequency_plot_controller = FrequencyPlotController(self)
+        
+
+
+
+
+    def open_mixer_window(self):
+        self.mixer_window = MixerWindow(self)
+        self.mixer_window.setWindowModality(Qt.WindowModality.ApplicationModal)
+        self.mixer_window.show()
+
+    def open_mixer_window(self):
+        self.mixer_window = MixerWindow(self)
+        self.mixer_window.setWindowModality(Qt.WindowModality.ApplicationModal)
+        self.mixer_window.show()
+
     def create_signal_display(self):
         self.graph_layout = QVBoxLayout()
         self.graph_layout.setSpacing(0)
@@ -155,52 +170,58 @@ class MainWindow(QMainWindow):
         self.button_layout.addWidget(self.load_signal_button)
         self.button_layout.addWidget(self.signal_mixer_button)
 
-        self.placeholder_box = QFrame()
-        self.placeholder_box.setFrameShape(QFrame.Shape.Box)
-        self.placeholder_box.setFrameShadow(QFrame.Shadow.Raised)
-        self.placeholder_box.setStyleSheet("border: 2px solid white;")
-        self.placeholder_box.setFixedHeight(380)
+        # self.placeholder_box = QFrame()
+        # self.placeholder_box.setFrameShape(QFrame.Shape.Box)
+        # self.placeholder_box.setFrameShadow(QFrame.Shadow.Raised)
+        # self.placeholder_box.setStyleSheet("border: 2px solid white;")
+        # self.placeholder_box.setFixedHeight(380)
 
-        self.placeholder_layout = QVBoxLayout(self.placeholder_box)
+        # self.signal_layout = QHBoxLayout()
+        # self.signal_1_label = QLabel("Signal 1")
+        # self.signal_1_label.setFont(font)
+        # self.signal_1_label.setStyleSheet("color: white; background: transparent; border: none;")
 
-        self.signal_layout = QHBoxLayout()
-        self.signal_1_label = QLabel("Signal 1")
-        self.signal_1_label.setFont(font)
-        self.signal_1_label.setStyleSheet("color: white; background: transparent; border: none;")
+        # self.eye_button = QPushButton()
+        # self.eye_button.setIcon(QIcon("eye.png"))
+        # self.eye_button.setFixedSize(40, 40)
+        # self.eye_button.setStyleSheet("""
+        #     QPushButton {
+        #         border: none;
+        #         background: transparent;
+        #     }
+        #     QPushButton:hover {
+        #         background-color: rgba(255, 255, 255, 0.2);
+        #     }
+        # """)
 
-        self.eye_button = QPushButton()
-        self.eye_button.setIcon(QIcon("eye.png"))
-        self.eye_button.setFixedSize(40, 40)
-        self.eye_button.setStyleSheet("""
-            QPushButton {
-                border: none;
-                background: transparent;
-            }
-            QPushButton:hover {
-                background-color: rgba(255, 255, 255, 0.2);
-            }
-        """)
+        # self.trash_button = QPushButton()
+        # self.trash_button.setIcon(QIcon("trash.png"))
+        # self.trash_button.setFixedSize(40, 40)
+        # self.trash_button.setStyleSheet("""
+        #     QPushButton {
+        #         border: none;
+        #         background: transparent;
+        #     }
+        #     QPushButton:hover {
+        #         background-color: rgba(255, 255, 255, 0.2);
+        #     }
+        # """)
 
-        self.trash_button = QPushButton()
-        self.trash_button.setIcon(QIcon("trash.png"))
-        self.trash_button.setFixedSize(40, 40)
-        self.trash_button.setStyleSheet("""
-            QPushButton {
-                border: none;
-                background: transparent;
-            }
-            QPushButton:hover {
-                background-color: rgba(255, 255, 255, 0.2);
-            }
-        """)
+        # self.signal_layout.addWidget(self.signal_1_label)
+        # self.signal_layout.addWidget(self.eye_button)
+        # self.signal_layout.addWidget(self.trash_button)
 
-        self.signal_layout.addWidget(self.signal_1_label)
-        self.signal_layout.addWidget(self.eye_button)
-        self.signal_layout.addWidget(self.trash_button)
 
-        self.placeholder_layout.addLayout(self.signal_layout)
+        # self.placeholder_layout.setAlignment(self.signal_layout, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
-        self.placeholder_layout.setAlignment(self.signal_layout, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
+        self.signals_scroll_area = QScrollArea()
+        self.scroll_area_widget = QWidget()
+        self.scroll_area_widget_layout = QVBoxLayout()
+        self.scroll_area_widget.setLayout(self.scroll_area_widget_layout)
+        self.signals_scroll_area.setWidget(self.scroll_area_widget)
+        self.scroll_area_widget.setStyleSheet("border:none;""padding:0px;""margin:0px")
+        self.signals_scroll_area.setWidgetResizable(True)
+        self.scroll_area_widget_layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
 
         self.sampling_freq_slider.valueChanged.connect(self.change_sampling_freq)
         self.snr_slider.valueChanged.connect(self.handle_snr_change)
@@ -209,7 +230,7 @@ class MainWindow(QMainWindow):
         self.control_group_layout.addWidget(self.snr_group)
         self.control_group_layout.addWidget(self.reconstruction_method_group)
         self.control_group_layout.addLayout(self.button_layout)
-        self.control_group_layout.addWidget(self.placeholder_box)
+        self.control_group_layout.addWidget(self.signals_scroll_area)
 
         self.control_layout.addWidget(self.control_group)
 
