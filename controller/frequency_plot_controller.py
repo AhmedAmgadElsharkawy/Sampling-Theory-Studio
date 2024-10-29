@@ -19,11 +19,6 @@ class FrequencyPlotController:
         # Clear previous plot
         self.main.frequency_domain_plot.clear()
         
-        # Add Nyquist frequency markers
-        nyquist = sampling_rate/2
-        self.main.frequency_domain_plot.addLine(x=nyquist, pen='r')
-        self.main.frequency_domain_plot.addLine(x=-nyquist, pen='r')
-        
         # Plot magnitude spectrum
         self.main.frequency_domain_plot.plot(f, X_mag, pen='b')
         self.main.frequency_domain_plot.plot(f[np.argmax(X_mag)], np.max(X_mag), symbol='x', symbolPen='y')

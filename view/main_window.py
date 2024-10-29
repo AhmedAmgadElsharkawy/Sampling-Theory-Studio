@@ -48,8 +48,7 @@ class MainWindow(QMainWindow):
         self.main_layout.addLayout(self.control_layout, 1)
 
         self.error_plot_controller = ErrorPlotController(self)
-        self.frequency_plot_controller = FrequencyPlotController(self)
-        self.frequency_plot_controller.plot_frequency_domain() 
+        self.frequency_plot_controller = FrequencyPlotController(self) 
         self.original_signal_plot.clear()
         self.displayed_signal.sample_signal()
         self.sampling_controller.change_sampling_freq(1)
