@@ -49,10 +49,12 @@ class MainWindow(QMainWindow):
 
         self.error_plot_controller = ErrorPlotController(self)
         self.frequency_plot_controller = FrequencyPlotController(self)
+        self.frequency_plot_controller.plot_frequency_domain() 
         self.original_signal_plot.clear()
         self.displayed_signal.sample_signal()
         self.sampling_controller.change_sampling_freq(1)
-
+         
+    
     def create_signal_display(self):
         self.graph_layout = QVBoxLayout()
         self.graph_layout.setSpacing(0)
@@ -118,7 +120,8 @@ class MainWindow(QMainWindow):
         self.reconstruction_combo.currentIndexChanged.connect(self.sampling_controller.change_reconstruction_method)
         
         self.reconstruction_method_layout.addWidget(self.reconstruction_combo)
-
+        
+        
         self.load_signal_button = QPushButton("Load Signal")
         self.load_signal_button.setFont(font)
         self.load_signal_button.setStyleSheet("""
