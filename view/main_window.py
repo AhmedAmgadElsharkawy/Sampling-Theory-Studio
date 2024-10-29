@@ -114,7 +114,7 @@ class MainWindow(QMainWindow):
         self.snr_group = QGroupBox()
         self.snr_group.setStyleSheet("border: none; padding: 5px;")
         self.snr_layout = QVBoxLayout(self.snr_group)
-        self.snr_label = QLabel("Signal-to-Noise Ratio (dB): 50")
+        self.snr_label = QLabel("Signal-to-Noise Ratio (dB): 100")
         self.snr_label.setFont(font)
         self.snr_label.setStyleSheet("color: white;")
         self.snr_slider = QSlider(Qt.Orientation.Horizontal)
