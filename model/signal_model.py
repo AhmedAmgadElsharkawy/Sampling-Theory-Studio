@@ -38,7 +38,7 @@ class Signal:
         temp_signal = np.array(self.y_data.copy())
         signal_power = temp_signal**2
         signal_average_power = np.mean(signal_power)
-        noise_power = signal_average_power / (self.SNR * 3)
+        noise_power = signal_average_power / self.SNR
         noise = np.random.normal(0, np.sqrt(noise_power), len(temp_signal))
         self.noise_samples.append(noise)
         return self.noise_samples
@@ -79,7 +79,7 @@ class Signal:
         x = np.asarray(x)
         y = np.asarray(y)
         x_new = np.asarray(x_new)
-        
+
         # Create a cubic spline interpolation function
         cs = CubicSpline(x_new, y)
 

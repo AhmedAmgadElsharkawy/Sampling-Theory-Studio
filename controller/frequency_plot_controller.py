@@ -8,11 +8,11 @@ class FrequencyPlotController:
     def plot_frequency_domain(self, y_signal_data):
         # Get data from the displayed signal
         signal = np.array(y_signal_data)
-        sampling_rate = 2 * 10
+        sampling_rate = self.main.displayed_signal.sampling_freq
         number_of_samples = len(signal)
         
         # Calculate FFT
-        fft_data = np.fft.fftshift(np.fft.fft(signal))
+        fft_data = np.fft.fft(signal)
         X_mag = np.abs(fft_data)
         freqs = np.fft.fftfreq(number_of_samples, 1/sampling_rate)
         # freqs = np.fft.fftshift(freqs)

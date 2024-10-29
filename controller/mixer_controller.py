@@ -24,6 +24,7 @@ class MixerController:
         self.mixer_window.accept() 
 
     def add_component(self):
+        maximum_freq_changed = False
         component = Component(frequency=float(self.mixer_window.frequency_input_field.text())
                               ,amplitude=float(self.mixer_window.amplitude_input_field.text()),
                               phase_shift=float(self.mixer_window.phase_shift_input_field.text()))
@@ -32,19 +33,28 @@ class MixerController:
             self.mixed_signal.min_frequency = component.frequency
         else:
             if component.frequency > self.mixed_signal.max_frequency:
+                maximum_freq_changed = True
                 self.mixed_signal.max_frequency = component.frequency
             if component.frequency < self.mixed_signal.min_frequency:
                 self.mixed_signal.min_frequency = component.frequency
 
 
-        component.x_data = np.arange(0, 20, 0.02)
+        component.x_data = np.arange(0, 1, 1 / (3 * self.mixed_signal.max_frequency))
         component.y_data = component.amplitude * np.sin(2 * np.pi * component.frequency * component.x_data + component.phase_shift * np.pi /180)
         self.mixed_signal.x_data = component.x_data
         if(len(self.mixed_signal.y_data) == 0):
             self.mixed_signal.y_data = component.y_data
-        else:
+        elif maximum_freq_changed == False:
             self.mixed_signal.y_data += component.y_data
-        self.mixed_signal.original_y  = self.mixed_signal.y_data.copy()
+        else :
+            for curr_component in self.mixed_signal.components:
+                curr_component.x_data = component.x_data.copy()
+                curr_component.y_data = curr_component.amplitude * np.sin(2 * np.pi * curr_component.frequency * curr_component.x_data + curr_component.phase_shift * np.pi /180)
+            maximum_freq_changed = False
+            self.mixed_signal.y_data = component.y_data
+            for curr_component in self.mixed_signal.components:
+                self.mixed_signal.y_data += curr_component.y_data
+        self.mixed_signal.original_y = self.mixed_signal.y_data.copy()
 
         self.mixer_window.mixed_signal.components.append(component)
 
