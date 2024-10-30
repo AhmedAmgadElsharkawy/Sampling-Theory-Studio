@@ -65,7 +65,7 @@ class MixerController:
         component.y_data = component.amplitude * np.sin(2 * np.pi * component.frequency * component.x_data + component.phase_shift * np.pi /180)
         self.mixed_signal.x_data = component.x_data
         if(len(self.mixed_signal.y_data) == 0):
-            self.mixed_signal.y_data = component.y_data
+            self.mixed_signal.y_data = component.y_data.copy()
         elif maximum_freq_changed == False:
             self.mixed_signal.y_data += component.y_data
         else :
@@ -73,7 +73,7 @@ class MixerController:
                 curr_component.x_data = component.x_data.copy()
                 curr_component.y_data = curr_component.amplitude * np.sin(2 * np.pi * curr_component.frequency * curr_component.x_data + curr_component.phase_shift * np.pi /180)
             maximum_freq_changed = False
-            self.mixed_signal.y_data = component.y_data
+            self.mixed_signal.y_data = component.y_data.copy()
             for curr_component in self.mixed_signal.components:
                 self.mixed_signal.y_data += curr_component.y_data
         self.mixed_signal.original_y = self.mixed_signal.y_data.copy()
@@ -111,19 +111,35 @@ class ComponentItem(QWidget):
         self.trash_button.setFixedSize(15, 15)
         self.component_item_layout.addWidget(self.component_name_label)
         self.component_item_layout.addStretch()
-        # self.component_item_layout.addWidget(self.trash_button)
+        self.component_item_layout.addWidget(self.trash_button)
 
         self.trash_button.clicked.connect(self.delete_component_item)
 
     def delete_component_item(self):
         self.mixer_window.mixed_signal.components.remove(self.component)
-                
         if(len(self.mixer_window.mixed_signal.components) == 0):
             self.mixer_window.mixed_signal.x_data = []
             self.mixer_window.mixed_signal.y_data = []
+            self.mixer_window.mixed_signal.max_frequency = 0
             self.mixer_window.add_signal_button.setEnabled(False)
             self.mixer_window.export_button.setEnabled(False)
             # self.mixer_window.mixed_signal = None
+        
+        elif self.component.frequency == self.mixer_window.mixed_signal.max_frequency:
+            self.mixer_window.mixed_signal.y_data -= self.component.y_data
+            self.mixer_window.mixed_signal.max_frequency = 0
+            for cur_component in self.mixer_window.mixed_signal.components:
+                self.mixer_window.mixed_signal.max_frequency = max(self.mixer_window.mixed_signal.max_frequency,cur_component.frequency)
+            
+            self.mixer_window.mixed_signal.x_data = np.arange(0, 1, 1 / (30 * self.mixer_window.mixed_signal.max_frequency))
+            for cur_component in self.mixer_window.mixed_signal.components:
+                cur_component.x_data = self.mixer_window.mixed_signal.x_data.copy()
+                cur_component.y_data = cur_component.amplitude * np.sin(2 * np.pi * cur_component.frequency * cur_component.x_data + cur_component.phase_shift * np.pi /180)
+            self.mixer_window.mixed_signal.y_data = [0]*len(self.mixer_window.mixed_signal.x_data)
+            for curr_component in self.mixer_window.mixed_signal.components:
+                self.mixer_window.mixed_signal.y_data += curr_component.y_data
+            self.mixer_window.mixed_signal.original_y = self.mixer_window.mixed_signal.y_data.copy()
+                
         else:
             self.mixer_window.mixed_signal.y_data -= self.component.y_data
 
