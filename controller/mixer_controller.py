@@ -61,7 +61,7 @@ class MixerController:
                 self.mixed_signal.min_frequency = component.frequency
 
 
-        component.x_data = np.arange(0, 1, 1 / (30 * self.mixed_signal.max_frequency))
+        component.x_data = np.arange(0, 20, 1 / (30 * self.mixed_signal.max_frequency))
         component.y_data = component.amplitude * np.sin(2 * np.pi * component.frequency * component.x_data + component.phase_shift * np.pi /180)
         self.mixed_signal.x_data = component.x_data
         if(len(self.mixed_signal.y_data) == 0):

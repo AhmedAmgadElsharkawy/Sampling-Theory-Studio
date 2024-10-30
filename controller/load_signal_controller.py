@@ -55,8 +55,8 @@ class SignalItem(QWidget):
 
         self.eye_button_show = QPushButton()
         self.eye_button_hide = QPushButton()
-        self.eye_button_show.setIcon(QIcon("assets/icons/show.svg"))
-        self.eye_button_hide.setIcon(QIcon("assets/icons/hide.svg"))
+        self.eye_button_show.setIcon(QIcon("assets/icons/hide.svg"))
+        self.eye_button_hide.setIcon(QIcon("assets/icons/show.svg"))
         self.eye_button_show.setFixedSize(30, 30)
         self.eye_button_hide.setFixedSize(30, 30)
         self.eye_button_show.setStyleSheet("""
