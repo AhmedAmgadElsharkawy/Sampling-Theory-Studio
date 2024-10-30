@@ -111,9 +111,10 @@ class SignalItem(QWidget):
         self.main.sampling_freq_slider.setEnabled(True)
         self.main.sampling_freq_slider.setRange(1, int(math.ceil(4 * self.main.displayed_signal.max_frequency)))
         self.main.sampling_freq_slider.setValue(1)
+        self.main.nyquist_rate_slider.setEnabled(True)
+        self.main.nyquist_rate_slider.setValue(0)
         self.main.snr_slider.setEnabled(True)
         self.main.reconstruction_combo.setEnabled(True)
-    
 
     def hide_signals(self):
         for i in range(self.main.scroll_area_widget_layout.count()):

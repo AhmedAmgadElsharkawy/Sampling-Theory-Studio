@@ -110,6 +110,20 @@ class MainWindow(QMainWindow):
         self.sampling_freq_slider.setTickPosition(QSlider.TickPosition.NoTicks)
         self.sampling_freq_layout.addWidget(self.sampling_freq_label)
         self.sampling_freq_layout.addWidget(self.sampling_freq_slider)
+        
+        self.nyquist_rate_group = QGroupBox()
+        self.nyquist_rate_group.setStyleSheet("border: none; padding: 5px;")
+        self.nyquist_rate_layout = QVBoxLayout(self.nyquist_rate_group)
+        self.nyquist_rate_label = QLabel("Nyquist Rate: 0")
+        self.nyquist_rate_label.setFont(font)
+        self.nyquist_rate_label.setStyleSheet("color: white;")
+        self.nyquist_rate_slider = QSlider(Qt.Orientation.Horizontal)
+        self.nyquist_rate_slider.setRange(0, 4)
+        self.nyquist_rate_slider.setValue(0)
+        self.nyquist_rate_slider.setEnabled(False)
+        self.nyquist_rate_slider.setTickPosition(QSlider.TickPosition.NoTicks)
+        self.nyquist_rate_layout.addWidget(self.nyquist_rate_label)
+        self.nyquist_rate_layout.addWidget(self.nyquist_rate_slider)
 
         self.snr_group = QGroupBox()
         self.snr_group.setStyleSheet("border: none; padding: 5px;")
@@ -227,7 +241,9 @@ class MainWindow(QMainWindow):
 
         self.sampling_freq_slider.valueChanged.connect(self.change_sampling_freq)
         self.snr_slider.valueChanged.connect(self.handle_snr_change)
+        self.nyquist_rate_slider.valueChanged.connect(self.change_nyquist_rate)
 
+        self.control_group_layout.addWidget(self.nyquist_rate_group)
         self.control_group_layout.addWidget(self.sampling_freq_group)
         self.control_group_layout.addWidget(self.snr_group)
         self.control_group_layout.addWidget(self.reconstruction_method_group)
@@ -243,8 +259,18 @@ class MainWindow(QMainWindow):
         # Call the method in SamplingController
         self.sampling_freq_label.setText(f"{self.sampling_freq_label.text().split(':')[0]}: {value}")
         self.sampling_controller.change_sampling_freq(value)
+        self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {int(value / self.displayed_signal.max_frequency)}")
+        self.nyquist_rate_slider.setValue(int(value / self.displayed_signal.max_frequency))
 
     def handle_snr_change(self, value):
         # Call the method in SamplingController
         self.snr_label.setText(f"{self.snr_label.text().split(':')[0]}: {value}")
         self.sampling_controller.change_SNR(value)
+
+    def change_nyquist_rate(self, value):
+        self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {value}")
+        sampling_freq_value = int(value * self.displayed_signal.max_frequency)
+        if sampling_freq_value == 0:
+            sampling_freq_value += 1
+        self.sampling_freq_slider.setValue(sampling_freq_value)
+        self.change_sampling_freq(sampling_freq_value)
