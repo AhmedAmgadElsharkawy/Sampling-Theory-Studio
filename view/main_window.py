@@ -2,7 +2,7 @@ import sys
 import numpy as np
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
-    QLabel, QSlider, QPushButton, QComboBox, QFrame, QGroupBox,QScrollArea
+    QLabel, QSlider, QPushButton, QComboBox, QFrame, QGroupBox,QScrollArea,QCheckBox
 )
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
@@ -136,6 +136,14 @@ class MainWindow(QMainWindow):
         self.snr_slider.setValue(100)
         self.snr_slider.setDisabled(True)
         self.snr_slider.setTickPosition(QSlider.TickPosition.NoTicks)
+        self.enable_disable_snr_box = QHBoxLayout()
+        self.enable_disable_noise_label = QLabel("Noise")
+        self.enable_disable_noise_label.setFont(font)
+        self.enable_disable_noise_checkbox = QCheckBox()
+        self.enable_disable_snr_box.addWidget(self.enable_disable_noise_label)
+        self.enable_disable_snr_box.addStretch(0)
+        self.enable_disable_snr_box.addWidget(self.enable_disable_noise_checkbox)
+        self.snr_layout.addLayout(self.enable_disable_snr_box)
         self.snr_layout.addWidget(self.snr_label)
         self.snr_layout.addWidget(self.snr_slider)
 
