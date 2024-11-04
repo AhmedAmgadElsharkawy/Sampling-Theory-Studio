@@ -130,6 +130,7 @@ class SignalItem(QWidget):
             self.main.sampling_freq_slider.setEnabled(False)
             self.main.snr_slider.setEnabled(False)
             self.main.reconstruction_combo.setEnabled(False)
+            self.main.nyquist_rate_slider.setEnabled(False)
         else:
             self.main.scroll_area_widget_layout.itemAt(0).widget().show_signal()
         self.deleteLater()
