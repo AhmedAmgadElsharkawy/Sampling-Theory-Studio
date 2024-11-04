@@ -27,6 +27,16 @@ class FrequencyPlotController:
         
         # Plot magnitude spectrum
         self.main.frequency_domain_plot.plot(freqs_positive, X_mag_positive, pen='r')
+        if len(freqs_positive) > 1:
+            freq_y_min = 1000
+            freq_y_max = -1000
+            for i in range(len(freqs_positive)):
+                freq_y_min = min(freq_y_min, X_mag_positive[i])
+                freq_y_max = max(freq_y_max, X_mag_positive[i])
+
+            self.main.frequency_domain_plot.setLimits(xMin = 0, xMax = freqs_positive[-1], yMin = freq_y_min, yMax = freq_y_max)
+            self.main.frequency_domain_plot.setXRange(0, freqs_positive[-1])
+            self.main.frequency_domain_plot.setYRange(0, freq_y_max)
         # self.main.frequency_domain_plot.plot(f[np.argmax(X_mag)], np.max(X_mag), symbol='x', symbolPen='y')
         
         # Set labels
