@@ -57,13 +57,13 @@ class SamplingController:
             error_max = max(error_max, error[i])
             error_min= min(error_min, error[i])
 
-        self.main.original_signal_plot.setYRange(signal_min, signal_max)
-        self.main.reconstructed_signal_plot.setYRange(interpolate_min, interpolate_max)
-        self.main.error_signal_plot.setYRange(error_min, error_max)
-
         self.main.original_signal_plot.setLimits(xMin=self.main.displayed_signal.x_data[0], xMax=self.main.displayed_signal.x_data[-1], yMin = signal_min, yMax = signal_max)
         self.main.reconstructed_signal_plot.setLimits(xMin=self.main.displayed_signal.x_data[0], xMax=self.main.displayed_signal.x_data[-1], yMin = interpolate_min, yMax = interpolate_max)
         self.main.error_signal_plot.setLimits(xMin=self.main.displayed_signal.x_data[0], xMax=self.main.displayed_signal.x_data[-1], yMin = error_min, yMax = error_max)
+
+        self.main.original_signal_plot.setYRange(signal_min, signal_max)
+        self.main.reconstructed_signal_plot.setYRange(interpolate_min, interpolate_max)
+        self.main.error_signal_plot.setYRange(error_min, error_max)
 
     def change_reconstruction_method(self):
         """Function to be triggered when the combo box selection changes."""
