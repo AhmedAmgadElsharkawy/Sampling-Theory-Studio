@@ -86,6 +86,11 @@ class MixerController:
 
     def draw_mixed_signal(self):
         self.mixer_window.mix_output_signal_plot.clear()
+        max_y = max(self.mixed_signal.y_data) if len(self.mixed_signal.y_data) else 1
+        min_y = min(self.mixed_signal.y_data) if len(self.mixed_signal.y_data) else 0
+        self.mixer_window.mix_output_signal_plot.setLimits(xMin = 0,xMax = 4,yMin = min_y,yMax = max_y)
+        self.mixer_window.mix_output_signal_plot.setXRange(0,4)
+        self.mixer_window.mix_output_signal_plot.setYRange(min_y,max_y)
         self.mixer_window.mix_output_signal_curve.setData(self.mixed_signal.x_data,self.mixed_signal.y_data)
         self.mixer_window.mix_output_signal_plot.addItem(self.mixer_window.mix_output_signal_curve)
 
@@ -131,7 +136,7 @@ class ComponentItem(QWidget):
             for cur_component in self.mixer_window.mixed_signal.components:
                 self.mixer_window.mixed_signal.max_frequency = max(self.mixer_window.mixed_signal.max_frequency,cur_component.frequency)
             
-            self.mixer_window.mixed_signal.x_data = np.arange(0, 1, 1 / (30 * self.mixer_window.mixed_signal.max_frequency))
+            self.mixer_window.mixed_signal.x_data = np.arange(0, 4, 1 / (20 * self.mixer_window.mixed_signal.max_frequency))
             for cur_component in self.mixer_window.mixed_signal.components:
                 cur_component.x_data = self.mixer_window.mixed_signal.x_data.copy()
                 cur_component.y_data = cur_component.amplitude * np.sin(2 * np.pi * cur_component.frequency * cur_component.x_data + cur_component.phase_shift * np.pi /180)
