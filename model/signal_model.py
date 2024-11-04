@@ -50,40 +50,59 @@ class Signal:
             noisy_signal += noise
         return noisy_signal
     
-    def whittaker_shannon_interpolation(self, x, y, x_new, T=1):
+    def whittaker_shannon_interpolation(self, x, y_sampled, x_sampled, T=1):
         x = np.asarray(x)
-        y = np.asarray(y)
-        x_new = np.asarray(x_new)
+        y_sampled = np.asarray(y_sampled)
+        x_sampled = np.asarray(x_sampled)
 
         # Calculate the sinc matrix
-        sinc_matrix = np.sinc((x - x_new[:, None]) / T)
+        sinc_matrix = np.sinc((x - x_sampled[:, None]) / T)
 
         # Perform the interpolation
-        y_new = np.dot(y, sinc_matrix)
+        y_new = np.dot(y_sampled, sinc_matrix)
 
         return y_new
     
-    def linear_interpolation(self, x, y, x_new):
+    def linear_interpolation(self, x, y_sampled, x_sampled):
         """Perform linear interpolation to estimate y values at x_new based on sampled x and y."""
         x = np.asarray(x)
-        y = np.asarray(y)
-        x_new = np.asarray(x_new)
+        y_sampled = np.asarray(y_sampled)
+        x_sampled = np.asarray(x_sampled)
 
         # Perform linear interpolation using numpy's interp function
-        y_new = np.interp(x, x_new, y)
+        y_new = np.interp(x, x_sampled, y_sampled)
 
         return y_new
     
-    def spline_interpolation(self, x, y, x_new):
+    def spline_interpolation(self, x, y_sampled, x_sampled):
         """Perform cubic spline interpolation to estimate y values at x_new based on sampled x and y."""
         x = np.asarray(x)
-        y = np.asarray(y)
-        x_new = np.asarray(x_new)
+        y_sampled = np.asarray(y_sampled)
+        x_sampled = np.asarray(x_sampled)
 
         # Create a cubic spline interpolation function
-        cs = CubicSpline(x_new, y)
+        cs = CubicSpline(x_sampled, y_sampled)
 
         # Evaluate the spline at the new x values
         y_new = cs(x)
+
+        return y_new
+
+    def zero_order_hold_interpolation(self, x, y_sampled, x_sampled):
+        x_full = np.asarray(x)
+        x_sampled = np.asarray(x_sampled)
+        y_sampled = np.asarray(y_sampled)
+
+        # Initialize output array
+        y_new = np.zeros_like(x_full)
+
+        # Perform Zero-Order Hold
+        for i in range(len(x_sampled) - 1):
+            # Find indices where x_full is between x_sampled[i] and x_sampled[i+1]
+            indices = (x_full >= x_sampled[i]) & (x_full < x_sampled[i + 1])
+            y_new[indices] = y_sampled[i]
+
+        # Handle the last segment
+        y_new[x_full >= x_sampled[-1]] = y_sampled[-1]
 
         return y_new

@@ -30,7 +30,9 @@ class SamplingController:
         if self.main.interpolation_method == "CubicSpline":
             interpolate = self.main.displayed_signal.spline_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values)
         elif self.main.interpolation_method == "Linear":
-            interpolate = self.main.displayed_signal.linear_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values)
+            interpolate = self.main.displayed_signal.(self.main.displayed_signal.x_data, y_values_sampled, x_values)
+        elif self.main.interpolation_method == "Zero-Order-Hold":
+            interpolate = self.main.displayed_signal.zero_order_hold(self.main.displayed_signal.x_data, y_values_sampled, x_values)
         else :
             interpolate = self.main.displayed_signal.whittaker_shannon_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values, 1 / self.main.displayed_signal.sampling_freq)
         error = np.array(self.main.displayed_signal.y_data) - interpolate
