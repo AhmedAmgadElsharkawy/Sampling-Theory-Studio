@@ -89,20 +89,42 @@ class Signal:
         return y_new
 
     def zero_order_hold_interpolation(self, x, y_sampled, x_sampled):
-        x_full = np.asarray(x)
+        x = np.asarray(x)
         x_sampled = np.asarray(x_sampled)
         y_sampled = np.asarray(y_sampled)
 
         # Initialize output array
-        y_new = np.zeros_like(x_full)
+        y_new = np.zeros_like(x)
 
         # Perform Zero-Order Hold
         for i in range(len(x_sampled) - 1):
             # Find indices where x_full is between x_sampled[i] and x_sampled[i+1]
-            indices = (x_full >= x_sampled[i]) & (x_full < x_sampled[i + 1])
+            indices = (x >= x_sampled[i]) & (x < x_sampled[i + 1])
             y_new[indices] = y_sampled[i]
 
         # Handle the last segment
-        y_new[x_full >= x_sampled[-1]] = y_sampled[-1]
+        y_new[x >= x_sampled[-1]] = y_sampled[-1]
+
+        return y_new
+    
+    def first_order_hold_interpolation(self, x, y_sampled, x_sampled):
+        x = np.asarray(x)
+        x_sampled = np.asarray(x_sampled)
+        y_sampled = np.asarray(y_sampled)
+
+        # Initialize output array
+        y_new = np.zeros_like(x)
+
+        # Perform First-Order Hold
+        for i in range(len(x_sampled) - 1):
+            # Find indices where x_full is between x_sampled[i] and x_sampled[i+1]
+            indices = (x >= x_sampled[i]) & (x < x_sampled[i + 1])
+            if np.any(indices):
+                # Linear interpolation formula
+                y_new[indices] = y_sampled[i] + (y_sampled[i + 1] - y_sampled[i]) * \
+                                 (x[indices] - x_sampled[i]) / (x_sampled[i + 1] - x_sampled[i])
+
+        # Handle the last segment
+        y_new[x >= x_sampled[-1]] = y_sampled[-1]
 
         return y_new
