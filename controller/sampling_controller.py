@@ -34,11 +34,32 @@ class SamplingController:
         else :
             interpolate = self.main.displayed_signal.whittaker_shannon_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values, 1 / self.main.displayed_signal.sampling_freq)
         error = np.array(self.main.displayed_signal.y_data) - interpolate
+        self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")
         self.main.error_signal_plot.plot(self.main.displayed_signal.x_data, error, pen="r", name="Error Signal")
         self.main.error_signal_plot.setYRange(-2, 2)
         self.main.frequency_plot_controller.plot_frequency_domain(y_values_sampled)
         self.main.reconstructed_signal_plot.plot(self.main.displayed_signal.x_data, interpolate, pen="r", name="Reconstructed Signal")
-        self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")
+        signal_min = 1000
+        signal_max = -1000
+        interpolate_min = 1000
+        interpolate_max = -1000
+        error_min = 1000
+        error_max = -1000
+        for i in range(len(self.main.displayed_signal.y_data)):
+            signal_max = max(signal_max, self.main.displayed_signal.y_data[i])
+            signal_min = min(signal_min, self.main.displayed_signal.y_data[i])
+            interpolate_max = max(interpolate_max, interpolate[i])
+            interpolate_min = min(interpolate_min, interpolate[i])
+            error_max = max(error_max, error[i])
+            error_min= min(error_min, error[i])
+
+        self.main.original_signal_plot.setYRange(signal_min, signal_max)
+        self.main.reconstructed_signal_plot.setYRange(interpolate_min, interpolate_max)
+        self.main.error_signal_plot.setYRange(error_min, error_max)
+
+        self.main.original_signal_plot.setLimits(xMin=self.main.displayed_signal.x_data[0], xMax=self.main.displayed_signal.x_data[-1], yMin = signal_min, yMax = signal_max)
+        self.main.reconstructed_signal_plot.setLimits(xMin=self.main.displayed_signal.x_data[0], xMax=self.main.displayed_signal.x_data[-1], yMin = interpolate_min, yMax = interpolate_max)
+        self.main.error_signal_plot.setLimits(xMin=self.main.displayed_signal.x_data[0], xMax=self.main.displayed_signal.x_data[-1], yMin = error_min, yMax = error_max)
 
     def change_reconstruction_method(self):
         """Function to be triggered when the combo box selection changes."""
