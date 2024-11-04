@@ -113,8 +113,10 @@ class SignalItem(QWidget):
         self.main.sampling_freq_slider.setValue(1)
         self.main.nyquist_rate_slider.setEnabled(True)
         self.main.nyquist_rate_slider.setValue(0)
-        self.main.snr_slider.setEnabled(True)
+        # self.main.snr_slider.setEnabled(True)
         self.main.reconstruction_combo.setEnabled(True)
+        self.main.enable_disable_noise_checkbox.setEnabled(True)
+        self.main.enable_disable_noise_checkbox.setChecked(False)
 
     def hide_signals(self):
         for i in range(self.main.scroll_area_widget_layout.count()):
@@ -131,6 +133,7 @@ class SignalItem(QWidget):
             self.main.snr_slider.setEnabled(False)
             self.main.reconstruction_combo.setEnabled(False)
             self.main.nyquist_rate_slider.setEnabled(False)
+            self.main.enable_disable_noise_checkbox.setEnabled(False)
         else:
             self.main.scroll_area_widget_layout.itemAt(0).widget().show_signal()
         self.deleteLater()

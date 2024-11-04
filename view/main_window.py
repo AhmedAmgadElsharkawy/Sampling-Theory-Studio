@@ -140,6 +140,8 @@ class MainWindow(QMainWindow):
         self.enable_disable_noise_label = QLabel("Noise")
         self.enable_disable_noise_label.setFont(font)
         self.enable_disable_noise_checkbox = QCheckBox()
+        self.enable_disable_noise_checkbox.setDisabled(True)
+        self.enable_disable_noise_checkbox.stateChanged.connect(self.on_noise_checkbox_state_change)
         self.enable_disable_snr_box.addWidget(self.enable_disable_noise_label)
         self.enable_disable_snr_box.addStretch(0)
         self.enable_disable_snr_box.addWidget(self.enable_disable_noise_checkbox)
@@ -282,3 +284,12 @@ class MainWindow(QMainWindow):
             sampling_freq_value += 1
         self.sampling_freq_slider.setValue(sampling_freq_value)
         self.change_sampling_freq(sampling_freq_value)
+
+    def on_noise_checkbox_state_change(self):
+        if self.enable_disable_noise_checkbox.isChecked():
+            self.snr_slider.setEnabled(True)
+            self.handle_snr_change(self.snr_slider.value())
+        else:
+            self.snr_slider.setEnabled(False)
+            self.displayed_signal.y_data = self.displayed_signal.original_y
+            self.sampling_controller.change_sampling_freq_and_plot_all_signals(self.displayed_signal.sampling_freq)
