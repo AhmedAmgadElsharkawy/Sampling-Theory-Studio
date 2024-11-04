@@ -53,6 +53,7 @@ class MainWindow(QMainWindow):
         self.error_plot_controller = ErrorPlotController(self)
         self.load_signal_controller = LoadSignalController(self)
         self.signal_mixer_button.clicked.connect(self.open_mixer_window)
+
         
         
 
@@ -92,13 +93,25 @@ class MainWindow(QMainWindow):
         self.control_layout = QVBoxLayout()
         self.control_group = QGroupBox("Controls")
         self.control_group.setStyleSheet(
-            "background-color: #2B2B2B; border: 2px solid #A0A0A0; padding: 10px;"
+            "background-color: #2B2B2B; border: 2px solid #A0A0A0; padding: 10px; border-radius:10px"
         )
         self.control_group_layout = QVBoxLayout(self.control_group)
+        self.control_group_layout.setSpacing(10)
         font = QFont("Arial", 10, QFont.Weight.Bold)
 
+        self.frequency_controls_container = QGroupBox()
+        self.frequency_controls_container.setStyleSheet("""
+        QLabel,QSlider { border:none;padding:0 } 
+        QGroupBox{padding: 0;border-radius:10px;}                     
+        """)
+        self.frequency_controls_container_layout = QVBoxLayout(self.frequency_controls_container)
+
         self.sampling_freq_group = QGroupBox()
-        self.sampling_freq_group.setStyleSheet("border: none; padding: 5px;")
+        self.sampling_freq_group.setStyleSheet("""
+        QLabel,QSlider { border:none;padding:0 } 
+        QGroupBox{padding: 0;border:none}                     
+        """)
+        self.sampling_freq_group.setObjectName("sampling_freq_group")
         self.sampling_freq_layout = QVBoxLayout(self.sampling_freq_group)
         self.sampling_freq_label = QLabel("Sampling Frequency (Hz): 1")
         self.sampling_freq_label.setFont(font)
@@ -112,7 +125,10 @@ class MainWindow(QMainWindow):
         self.sampling_freq_layout.addWidget(self.sampling_freq_slider)
         
         self.nyquist_rate_group = QGroupBox()
-        self.nyquist_rate_group.setStyleSheet("border: none; padding: 5px;")
+        self.nyquist_rate_group.setStyleSheet("""
+        QLabel,QSlider { border:none;padding:0 } 
+        QGroupBox{padding: 0;border:none}                     
+        """)
         self.nyquist_rate_layout = QVBoxLayout(self.nyquist_rate_group)
         self.nyquist_rate_label = QLabel("Nyquist Rate: 0")
         self.nyquist_rate_label.setFont(font)
@@ -126,9 +142,14 @@ class MainWindow(QMainWindow):
         self.nyquist_rate_layout.addWidget(self.nyquist_rate_slider)
 
         self.snr_group = QGroupBox()
-        self.snr_group.setStyleSheet("border: none; padding: 5px;")
+        self.snr_group.setStyleSheet("""
+        QCheckBox,QLabel,QSlider { border:none;padding:0 }
+        QGroupBox{border-radius:10px;}                   
+        """)
         self.snr_layout = QVBoxLayout(self.snr_group)
+        self.snr_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
         self.snr_label = QLabel("Signal-to-Noise Ratio (dB): 100")
+        
         self.snr_label.setFont(font)
         self.snr_label.setStyleSheet("color: white;")
         self.snr_slider = QSlider(Qt.Orientation.Horizontal)
@@ -146,13 +167,15 @@ class MainWindow(QMainWindow):
         self.enable_disable_snr_box.addStretch(0)
         self.enable_disable_snr_box.addWidget(self.enable_disable_noise_checkbox)
         self.snr_layout.addLayout(self.enable_disable_snr_box)
+        self.snr_layout.addSpacing(20)
         self.snr_layout.addWidget(self.snr_label)
         self.snr_layout.addWidget(self.snr_slider)
 
         self.reconstruction_method_group = QGroupBox("Reconstruction Method")
-        self.reconstruction_method_group.setStyleSheet(
-            "border: 2px solid #A0A0A0; padding: 5px; color: white;"
-        )
+        self.reconstruction_method_group.setStyleSheet("""
+        QComboBox { border:2px solid gray;border-radius:4px;padding:5px }
+        QGroupBox{border-radius:10px;}                   
+        """)
         self.reconstruction_method_layout = QVBoxLayout(self.reconstruction_method_group)
         self.reconstruction_combo = QComboBox()
         self.reconstruction_combo.addItems(["Whittaker-Shannon", "Linear", "CubicSpline", "Zero-Order-Hold", "First-Order-Hold"])
@@ -191,6 +214,7 @@ class MainWindow(QMainWindow):
                 background-color: #81C784;
             }
         """)
+
 
         self.button_layout = QHBoxLayout()
         self.button_layout.addWidget(self.load_signal_button)
@@ -253,8 +277,11 @@ class MainWindow(QMainWindow):
         self.snr_slider.valueChanged.connect(self.handle_snr_change)
         self.nyquist_rate_slider.valueChanged.connect(self.change_nyquist_rate)
 
-        self.control_group_layout.addWidget(self.nyquist_rate_group)
-        self.control_group_layout.addWidget(self.sampling_freq_group)
+        # self.control_group_layout.addWidget(self.nyquist_rate_group)
+        # self.control_group_layout.addWidget(self.sampling_freq_group)
+        self.frequency_controls_container_layout.addWidget(self.nyquist_rate_group)
+        self.frequency_controls_container_layout.addWidget(self.sampling_freq_group)
+        self.control_group_layout.addWidget(self.frequency_controls_container)
         self.control_group_layout.addWidget(self.snr_group)
         self.control_group_layout.addWidget(self.reconstruction_method_group)
         self.control_group_layout.addLayout(self.button_layout)
