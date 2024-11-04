@@ -7,9 +7,9 @@ class SamplingController:
     def change_SNR(self, value):
         self.main.displayed_signal.change_snr(value)
 
-        self.change_sampling_freq(self.main.displayed_signal.sampling_freq)
+        self.change_sampling_freq_and_plot_all_signals(self.main.displayed_signal.sampling_freq)
     
-    def change_sampling_freq(self, value):
+    def change_sampling_freq_and_plot_all_signals(self, value):
         self.main.displayed_signal.change_sampling_freq(value)
         
         self.main.original_signal_plot.clear()
@@ -69,7 +69,7 @@ class SamplingController:
         """Function to be triggered when the combo box selection changes."""
         selected_option = self.main.reconstruction_combo.currentText()  # Get the selected text
         self.main.interpolation_method = selected_option
-        self.change_sampling_freq(self.main.displayed_signal.sampling_freq)
+        self.change_sampling_freq_and_plot_all_signals(self.main.displayed_signal.sampling_freq)
 
     def clear_plots(self):
         self.main.original_signal_plot.clear()

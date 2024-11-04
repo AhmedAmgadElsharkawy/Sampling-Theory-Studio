@@ -258,7 +258,7 @@ class MainWindow(QMainWindow):
     def change_sampling_freq(self, value):
         # Call the method in SamplingController
         self.sampling_freq_label.setText(f"{self.sampling_freq_label.text().split(':')[0]}: {value}")
-        self.sampling_controller.change_sampling_freq(value)
+        self.sampling_controller.change_sampling_freq_and_plot_all_signals(value)
         self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {int(value / self.displayed_signal.max_frequency)}")
         self.nyquist_rate_slider.setValue(int(value / self.displayed_signal.max_frequency))
 
