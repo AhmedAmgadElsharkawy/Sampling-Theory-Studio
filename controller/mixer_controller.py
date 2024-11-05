@@ -13,6 +13,11 @@ class MixerController:
         self.main = main
         self.mixer_window = mixer_window
         self.mixed_signal = mixer_window.mixed_signal
+
+        self.mixer_window.frequency_input_field.setText("10")  
+        self.mixer_window.amplitude_input_field.setText("10")  
+        self.mixer_window.phase_shift_input_field.setText("0")
+
         self.mixer_window.add_component_button.clicked.connect(self.add_component)
         self.mixer_window.add_signal_button.clicked.connect(self.add_signal)
         self.mixer_window.cancel_push_button.clicked.connect(self.close_mixer)
@@ -47,9 +52,11 @@ class MixerController:
 
     def add_component(self):
         maximum_freq_changed = False
-        component = Component(frequency=float(self.mixer_window.frequency_input_field.text())
-                              ,amplitude=float(self.mixer_window.amplitude_input_field.text()),
-                              phase_shift=float(self.mixer_window.phase_shift_input_field.text()))
+        frequency = float(self.mixer_window.frequency_input_field.text())
+        amplitude = float(self.mixer_window.amplitude_input_field.text())
+        phase_shift = float(self.mixer_window.phase_shift_input_field.text())
+        
+        component = Component(frequency=frequency, amplitude=amplitude, phase_shift=phase_shift)
         if self.mixed_signal.max_frequency == None:
             self.mixed_signal.max_frequency = component.frequency
             self.mixed_signal.min_frequency = component.frequency
