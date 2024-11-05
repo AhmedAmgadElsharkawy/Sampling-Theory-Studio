@@ -134,7 +134,7 @@ class MainWindow(QMainWindow):
         self.nyquist_rate_label.setFont(font)
         self.nyquist_rate_label.setStyleSheet("color: white;")
         self.nyquist_rate_slider = QSlider(Qt.Orientation.Horizontal)
-        self.nyquist_rate_slider.setRange(0, 4)
+        self.nyquist_rate_slider.setRange(0, 40)
         self.nyquist_rate_slider.setValue(0)
         self.nyquist_rate_slider.setEnabled(False)
         self.nyquist_rate_slider.setTickPosition(QSlider.TickPosition.NoTicks)
@@ -296,8 +296,10 @@ class MainWindow(QMainWindow):
         # Call the method in SamplingController
         self.sampling_freq_label.setText(f"{self.sampling_freq_label.text().split(':')[0]}: {value}")
         self.sampling_controller.change_sampling_freq_and_plot_all_signals(value)
-        self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {int(value / self.displayed_signal.max_frequency)}")
-        self.nyquist_rate_slider.setValue(int(value / self.displayed_signal.max_frequency))
+        nyquist_rate_value = round((value / self.displayed_signal.max_frequency) * 10, 1)
+        self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {nyquist_rate_value / 10}")
+        if self.nyquist_rate_slider.value() != nyquist_rate_value:
+            self.nyquist_rate_slider.setValue(int(nyquist_rate_value))
 
     def handle_snr_change(self, value):
         # Call the method in SamplingController
@@ -305,8 +307,8 @@ class MainWindow(QMainWindow):
         self.sampling_controller.change_SNR(value)
 
     def change_nyquist_rate(self, value):
-        self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {value}")
-        sampling_freq_value = int(value * self.displayed_signal.max_frequency)
+        self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {value/10}")
+        sampling_freq_value = int((value/10) * self.displayed_signal.max_frequency)
         if sampling_freq_value == 0:
             sampling_freq_value += 1
         self.sampling_freq_slider.setValue(sampling_freq_value)
