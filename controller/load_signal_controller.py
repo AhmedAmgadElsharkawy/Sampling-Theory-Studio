@@ -11,6 +11,14 @@ class LoadSignalController:
     def __init__(self,main):
         self.main = main
         self.main.load_signal_button.clicked.connect(self.browse_file)
+        self.load_default_file()
+
+    def load_default_file(self):
+        default_file_path = "data/data.csv"  
+        if os.path.exists(default_file_path):
+            self.add_signal(default_file_path)
+        else:
+            print("Default file not found.")
 
     def browse_file(self):
         file_dialog = QFileDialog(self.main)
