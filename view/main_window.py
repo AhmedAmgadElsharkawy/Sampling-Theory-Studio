@@ -300,7 +300,15 @@ class MainWindow(QMainWindow):
         self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {nyquist_rate_value / 10}")
         if self.nyquist_rate_slider.value() != nyquist_rate_value:
             self.nyquist_rate_slider.setValue(int(nyquist_rate_value))
+        self.update_spline_option()
 
+    def update_spline_option(self):
+        num_sample_points = len(self.displayed_signal.sampled_points)
+        
+        if num_sample_points < 2:
+            self.reconstruction_combo.model().item(1).setEnabled(False)  
+        else:
+            self.reconstruction_combo.model().item(1).setEnabled(True) 
     def handle_snr_change(self, value):
         # Call the method in SamplingController
         self.snr_label.setText(f"{self.snr_label.text().split(':')[0]}: {value}")
