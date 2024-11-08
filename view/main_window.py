@@ -113,7 +113,7 @@ class MainWindow(QMainWindow):
         """)
         self.sampling_freq_group.setObjectName("sampling_freq_group")
         self.sampling_freq_layout = QVBoxLayout(self.sampling_freq_group)
-        self.sampling_freq_label = QLabel("Sampling Frequency (Hz): 1")
+        self.sampling_freq_label = QLabel("Sampling Frequency (Hz): 2")
         self.sampling_freq_label.setFont(font)
         self.sampling_freq_label.setStyleSheet("color: white;")
         self.sampling_freq_slider = QSlider(Qt.Orientation.Horizontal)
