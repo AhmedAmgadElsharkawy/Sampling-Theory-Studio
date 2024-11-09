@@ -41,7 +41,7 @@ class SamplingController:
         self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")
         self.main.error_signal_plot.plot(self.main.displayed_signal.x_data, error, pen="r", name="Error Signal")
         self.main.error_signal_plot.setYRange(-2, 2)
-        self.main.frequency_plot_controller.plot_frequency_domain(y_values_sampled)
+        self.main.frequency_plot_controller.plot_frequency_domain(y_values_sampled, x_values)
         self.main.reconstructed_signal_plot.plot(self.main.displayed_signal.x_data, interpolate, pen="r", name="Reconstructed Signal")
         signal_min = 1000
         signal_max = -1000

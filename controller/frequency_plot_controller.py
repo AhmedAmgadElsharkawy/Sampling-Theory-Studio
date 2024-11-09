@@ -1,46 +1,61 @@
 import numpy as np
 import pyqtgraph as pg
+from PyQt5.QtCore import Qt
+
 
 class FrequencyPlotController:
     def __init__(self, main):
         self.main = main
         
-    def plot_frequency_domain(self, y_signal_data):
-        # Get data from the displayed signal
-        signal = np.array(y_signal_data)
-        sampling_rate = self.main.displayed_signal.sampling_freq
-        number_of_samples = len(signal)
         
-        # Calculate FFT
-        fft_data = np.fft.fft(signal)
-        X_mag = np.abs(fft_data)
-        freqs = np.fft.fftfreq(number_of_samples, 1/sampling_rate)
-        # freqs = np.fft.fftshift(freqs)
-
-        # Keep only positive frequencies
-        positive_freq_indices = freqs >= 0
-        X_mag_positive = X_mag[positive_freq_indices]
-        freqs_positive = freqs[positive_freq_indices]
-
+    def plot_frequency_domain(self, y_signal_data, x_signal_data):
+        # Get data from the displayed signal
+        signal_amplitude_original = np.array(self.main.displayed_signal.y_data)
+        signal_amplitude_original = signal_amplitude_original - np.mean(signal_amplitude_original)
+        sampling_rate = self.main.displayed_signal.sampling_freq
+        twice_max_frequency = 20 * self.main.displayed_signal.max_frequency
+        number_of_samples = len(signal_amplitude_original)
+        
+        
+        # Calculate FFT for the original signal
+        fft_data_original = np.fft.fft(signal_amplitude_original)
+        amplitude_axis_original = np.abs(fft_data_original)
+        amplitude_axis_original = np.fft.fftshift(amplitude_axis_original)
+        freqs_axis_original = np.fft.fftfreq(len(fft_data_original), 1 / twice_max_frequency)
+        freqs_axis_original = np.fft.fftshift(freqs_axis_original)
+        
+        freqs_axis_repeated = np.fft.fftfreq(len(fft_data_original), 1 / (twice_max_frequency))
+        freqs_axis_repeated = np.fft.fftshift(freqs_axis_repeated)
+        
         # Clear previous plot
         self.main.frequency_domain_plot.clear()
-        
-        # Plot magnitude spectrum
-        self.main.frequency_domain_plot.plot(freqs_positive, X_mag_positive, pen='r')
-        if len(freqs_positive) > 1:
-            freq_y_min = 1000
-            freq_y_max = -1000
-            for i in range(len(freqs_positive)):
-                freq_y_min = min(freq_y_min, X_mag_positive[i])
-                freq_y_max = max(freq_y_max, X_mag_positive[i])
 
-            self.main.frequency_domain_plot.setLimits(xMin = 0, xMax = freqs_positive[-1], yMin = freq_y_min, yMax = freq_y_max)
-            self.main.frequency_domain_plot.setXRange(0, freqs_positive[-1])
-            self.main.frequency_domain_plot.setYRange(0, freq_y_max)
-        # self.main.frequency_domain_plot.plot(f[np.argmax(X_mag)], np.max(X_mag), symbol='x', symbolPen='y')
+        # Create a PlotDataItem for the original signal
+        plt = pg.PlotDataItem(freqs_axis_original, amplitude_axis_original, pen='r')
+        self.main.frequency_domain_plot.addItem(plt)
+
+        # Create PlotDataItems for repeated signals
+        for i in [-2, -1, 1, 2]:
+            shifted_freqs = freqs_axis_repeated + (i *  sampling_rate)
+            plt = pg.PlotDataItem(shifted_freqs, amplitude_axis_original, pen='b')
+            self.main.frequency_domain_plot.addItem(plt)
+
+
+        # Set fixed view range to show overlapping
+        freq_y_min = number_of_samples
+        freq_y_max = -number_of_samples
+
+        for i in range(len(freqs_axis_original)):
+            freq_y_min = min(freq_y_min, amplitude_axis_original[i])
+            freq_y_max = max(freq_y_max, amplitude_axis_original[i])
+            freq_range = 10 * sampling_rate
+            self.main.frequency_domain_plot.setLimits(xMin=min(freqs_axis_repeated), xMax=max(freqs_axis_repeated), yMin=freq_y_min, yMax=freq_y_max)
+            
+        # Set plot ranges 
+        self.main.frequency_domain_plot.setXRange(-freq_range, freq_range)
+        self.main.frequency_domain_plot.setYRange(0, np.max(amplitude_axis_original)) 
         
         # Set labels
         self.main.frequency_domain_plot.setLabel('bottom', 'Frequency (Hz)')
         self.main.frequency_domain_plot.setLabel('left', 'Magnitude')
-
 
