@@ -297,7 +297,7 @@ class MainWindow(QMainWindow):
         self.sampling_freq_label.setText(f"{self.sampling_freq_label.text().split(':')[0]}: {value}")
         self.sampling_controller.change_sampling_freq_and_plot_all_signals(value)
         nyquist_rate_value = round((value / self.displayed_signal.max_frequency) * 10, 1)
-        self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {nyquist_rate_value / 10}")
+        self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {round(nyquist_rate_value / 10,2)}")
         if self.nyquist_rate_slider.value() != nyquist_rate_value:
             self.nyquist_rate_slider.setValue(int(nyquist_rate_value))
         self.update_spline_option()
