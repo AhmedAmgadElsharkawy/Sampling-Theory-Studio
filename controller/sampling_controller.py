@@ -37,7 +37,7 @@ class SamplingController:
             interpolate = self.main.displayed_signal.first_order_hold_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values)
         else :
             interpolate = self.main.displayed_signal.whittaker_shannon_interpolation(self.main.displayed_signal.x_data, y_values_sampled, x_values, 1 / self.main.displayed_signal.sampling_freq)
-        error = np.array(self.main.displayed_signal.y_data) - interpolate
+        error = np.array(self.main.displayed_signal.original_y) - interpolate
         self.main.original_signal_plot.plot(self.main.displayed_signal.x_data, self.main.displayed_signal.y_data, pen='r', name="Original Signal")
         self.main.error_signal_plot.plot(self.main.displayed_signal.x_data, error, pen="r", name="Error Signal")
         self.main.error_signal_plot.setYRange(-2, 2)

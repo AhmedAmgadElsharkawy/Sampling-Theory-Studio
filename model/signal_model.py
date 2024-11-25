@@ -1,6 +1,7 @@
 import numpy as np
 from diffpy.utils.parsers.resample import wsinterp
 from scipy.interpolate import CubicSpline
+import random
 class Signal:
     def __init__(self):
         self.x_data = []
@@ -44,10 +45,14 @@ class Signal:
         return self.noise_samples
 
     def apply_noise(self, y):
-        noisy = self.create_noise()
         noisy_signal = y.copy()
-        for noise in noisy:
-            noisy_signal += noise
+        maxi = -1000
+        for i in range(len(self.y_data)):
+            maxi = max(maxi, abs(noisy_signal[i]))
+        for i in range(len(self.y_data)):
+            if (self.SNR != 100):
+                rand = random.uniform(-1, 1) 
+                noisy_signal[i] += (rand * (maxi * (1 / self.SNR)))
         return noisy_signal
     
     def whittaker_shannon_interpolation(self, x, y_sampled, x_sampled, T=1):
