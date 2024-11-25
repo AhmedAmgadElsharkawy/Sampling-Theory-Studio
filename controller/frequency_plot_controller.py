@@ -1,6 +1,6 @@
 import numpy as np
 import pyqtgraph as pg
-from PyQt5.QtCore import Qt
+from PyQt6.QtCore import Qt
 
 
 class FrequencyPlotController:
