@@ -24,9 +24,6 @@ class FrequencyPlotController:
         freqs_axis_original = np.fft.fftfreq(len(fft_data_original), 1 / twice_max_frequency)
         freqs_axis_original = np.fft.fftshift(freqs_axis_original)
         
-        freqs_axis_repeated = np.fft.fftfreq(len(fft_data_original), 1 / (twice_max_frequency))
-        freqs_axis_repeated = np.fft.fftshift(freqs_axis_repeated)
-        
         # Clear previous plot
         self.main.frequency_domain_plot.clear()
 
@@ -36,7 +33,7 @@ class FrequencyPlotController:
 
         # Create PlotDataItems for repeated signals
         for i in [-2, -1, 1, 2]:
-            shifted_freqs = freqs_axis_repeated + (i *  sampling_rate)
+            shifted_freqs = freqs_axis_original + (i *  sampling_rate)
             plt = pg.PlotDataItem(shifted_freqs, amplitude_axis_original, pen='b')
             self.main.frequency_domain_plot.addItem(plt)
 
@@ -49,7 +46,7 @@ class FrequencyPlotController:
             freq_y_min = min(freq_y_min, amplitude_axis_original[i])
             freq_y_max = max(freq_y_max, amplitude_axis_original[i])
             freq_range = 10 * sampling_rate
-            self.main.frequency_domain_plot.setLimits(xMin=min(freqs_axis_repeated), xMax=max(freqs_axis_repeated), yMin=freq_y_min, yMax=freq_y_max)
+            self.main.frequency_domain_plot.setLimits(xMin=min(freqs_axis_original), xMax=max(freqs_axis_original), yMin=freq_y_min, yMax=freq_y_max)
             
         # Set plot ranges 
         self.main.frequency_domain_plot.setXRange(-freq_range, freq_range)
