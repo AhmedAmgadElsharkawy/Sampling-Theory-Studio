@@ -178,7 +178,7 @@ class MainWindow(QMainWindow):
         """)
         self.reconstruction_method_layout = QVBoxLayout(self.reconstruction_method_group)
         self.reconstruction_combo = QComboBox()
-        self.reconstruction_combo.addItems(["Whittaker-Shannon", "CubicSpline", "Zero-Order-Hold", "First-Order-Hold"])
+        self.reconstruction_combo.addItems(["Whittaker-Shannon", "Lanczos", "CubicSpline", "Zero-Order-Hold", "First-Order-Hold"])
         self.reconstruction_combo.setEnabled(False)
         self.reconstruction_combo.currentIndexChanged.connect(self.sampling_controller.change_reconstruction_method)
         
