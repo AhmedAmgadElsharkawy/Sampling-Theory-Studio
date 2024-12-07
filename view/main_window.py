@@ -294,12 +294,15 @@ class MainWindow(QMainWindow):
 
     def change_sampling_freq(self, value):
         # Call the method in SamplingController
+        print("sampling: ", value)
         self.sampling_freq_label.setText(f"{self.sampling_freq_label.text().split(':')[0]}: {value}")
         self.sampling_controller.change_sampling_freq_and_plot_all_signals(value)
+        self.nyquist_rate_slider.valueChanged.disconnect(self.change_nyquist_rate)
         nyquist_rate_value = round((value / self.displayed_signal.max_frequency) * 10, 1)
         self.nyquist_rate_label.setText(f"{self.nyquist_rate_label.text().split(':')[0]}: {round(nyquist_rate_value / 10,2)}")
         if self.nyquist_rate_slider.value() != nyquist_rate_value:
             self.nyquist_rate_slider.setValue(int(nyquist_rate_value))
+        self.nyquist_rate_slider.valueChanged.connect(self.change_nyquist_rate)
         self.update_spline_option()
 
     def update_spline_option(self):
@@ -319,8 +322,11 @@ class MainWindow(QMainWindow):
         sampling_freq_value = int((value/10) * self.displayed_signal.max_frequency)
         if sampling_freq_value == 0:
             sampling_freq_value += 1
+        print("Nyquist: ", value)
+        self.sampling_freq_slider.valueChanged.disconnect(self.change_sampling_freq)
         self.sampling_freq_slider.setValue(sampling_freq_value)
-        self.change_sampling_freq(sampling_freq_value)
+        self.sampling_freq_slider.valueChanged.connect(self.change_sampling_freq)
+        self.sampling_controller.change_sampling_freq_and_plot_all_signals(sampling_freq_value)
 
     def on_noise_checkbox_state_change(self):
         if self.enable_disable_noise_checkbox.isChecked():

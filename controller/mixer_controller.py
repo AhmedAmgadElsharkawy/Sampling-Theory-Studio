@@ -69,7 +69,7 @@ class MixerController:
 
 
         component.x_data = np.arange(0, 4, 1 / (20 * self.mixed_signal.max_frequency))
-        component.y_data = component.amplitude * np.sin(2 * np.pi * component.frequency * component.x_data + component.phase_shift * np.pi /180)
+        component.y_data = component.amplitude * np.cos(2 * np.pi * component.frequency * component.x_data + component.phase_shift * np.pi /180)
         self.mixed_signal.x_data = component.x_data
         if(len(self.mixed_signal.y_data) == 0):
             self.mixed_signal.y_data = component.y_data.copy()
@@ -78,7 +78,7 @@ class MixerController:
         else :
             for curr_component in self.mixed_signal.components:
                 curr_component.x_data = component.x_data.copy()
-                curr_component.y_data = curr_component.amplitude * np.sin(2 * np.pi * curr_component.frequency * curr_component.x_data + curr_component.phase_shift * np.pi /180)
+                curr_component.y_data = curr_component.amplitude * np.cos(2 * np.pi * curr_component.frequency * curr_component.x_data + curr_component.phase_shift * np.pi /180)
             maximum_freq_changed = False
             self.mixed_signal.y_data = component.y_data.copy()
             for curr_component in self.mixed_signal.components:
@@ -146,7 +146,7 @@ class ComponentItem(QWidget):
             self.mixer_window.mixed_signal.x_data = np.arange(0, 4, 1 / (20 * self.mixer_window.mixed_signal.max_frequency))
             for cur_component in self.mixer_window.mixed_signal.components:
                 cur_component.x_data = self.mixer_window.mixed_signal.x_data.copy()
-                cur_component.y_data = cur_component.amplitude * np.sin(2 * np.pi * cur_component.frequency * cur_component.x_data + cur_component.phase_shift * np.pi /180)
+                cur_component.y_data = cur_component.amplitude * np.cos(2 * np.pi * cur_component.frequency * cur_component.x_data + cur_component.phase_shift * np.pi /180)
             self.mixer_window.mixed_signal.y_data = [0]*len(self.mixer_window.mixed_signal.x_data)
             for curr_component in self.mixer_window.mixed_signal.components:
                 self.mixer_window.mixed_signal.y_data += curr_component.y_data

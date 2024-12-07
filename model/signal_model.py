@@ -75,7 +75,10 @@ class Signal:
         # Perform the interpolation
         y_new = np.dot(y_sampled, sinc_matrix)
 
-        return y_new
+        reconstructed_y = np.array([np.sum(y_sampled * np.sinc((t - x_sampled) / T))
+                                for t in x])
+
+        return reconstructed_y
     
     def linear_interpolation(self, x, y_sampled, x_sampled):
         """Perform linear interpolation to estimate y values at x_new based on sampled x and y."""
