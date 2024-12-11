@@ -43,3 +43,5 @@ A desktop application illustrating signal sampling and recovery based on the Nyq
     ``````
     python main.py
     ``````
+
+[Watch the demo video](assets\Sampling-Theory-Studio-Demo.mp4)
