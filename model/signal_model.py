@@ -2,6 +2,7 @@ import numpy as np
 from diffpy.utils.parsers.resample import wsinterp
 from scipy.interpolate import CubicSpline
 import random
+import math
 class Signal:
     def __init__(self):
         self.x_data = []
@@ -45,14 +46,22 @@ class Signal:
         return self.noise_samples
 
     def apply_noise(self, y):
+        powers = 0
         noisy_signal = y.copy()
-        maxi = -1000
-        for i in range(len(self.y_data)):
-            maxi = max(maxi, abs(noisy_signal[i]))
-        for i in range(len(self.y_data)):
-            if (self.SNR != 100):
-                rand = random.uniform(-1, 1) 
-                noisy_signal[i] += (rand * (maxi * (1 / self.SNR)))
+        loop = 1
+        N = len(self.y_data)
+        for i in range(N):
+            powers += (self.y_data[i] * self.y_data[i])
+        powers /= N
+        pNoise = powers / self.SNR
+        noise = 0
+        for i in range(N):
+            random_num = random.uniform(-1, 1)
+            noise = (math.sqrt(pNoise) * random_num)
+            if loop == self.SNR:
+                noisy_signal[i] += noise
+                loop = 0
+            loop += 1
         return noisy_signal
     
     def whittaker_shannon_interpolation(self, x, y_sampled, x_sampled, T=1):
@@ -66,7 +75,10 @@ class Signal:
         # Perform the interpolation
         y_new = np.dot(y_sampled, sinc_matrix)
 
-        return y_new
+        reconstructed_y = np.array([np.sum(y_sampled * np.sinc((t - x_sampled) / T))
+                                for t in x])
+
+        return reconstructed_y
     
     def linear_interpolation(self, x, y_sampled, x_sampled):
         """Perform linear interpolation to estimate y values at x_new based on sampled x and y."""
@@ -133,3 +145,22 @@ class Signal:
         y_new[x >= x_sampled[-1]] = y_sampled[-1]
 
         return y_new
+        
+    def lanczos_interpolation(self, x, y, x_interp, a=3):
+        def lanczos(x):
+            if x == 0:
+                return 1
+            if -a < x < a:
+                return (a * np.sin(x * np.pi) * np.sin(x * np.pi / a)) / (np.pi ** 2 * x ** 2)
+            return 0
+        
+        y_interp = []
+        for i, t in enumerate(x_interp):
+            sum = 0
+            for j, sample_value in enumerate(x):
+                if j >= 0 and j < len(y):
+                    x_value = (t - sample_value) / (x[1] - x[0])
+                    sum += (y[j] * lanczos(x_value))
+            y_interp.append(sum)
+
+        return np.array(y_interp)
