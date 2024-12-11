@@ -37,8 +37,8 @@ https://github.com/user-attachments/assets/736ee24c-a420-4012-9d03-9f1241f83d20
 ## Features
 
 - **Load Signal:** Support loading pre-recorded signals from CSV files.  
-- **Export Signal:** Save composed signals to CSV files, allowing you to load and share them at any time.  
 - **Signal Mixer:** Compose custom signals by summing sinusoids with different frequencies, magnitudes, and phase shifts, with real-time generation.  
+- **Export Signal:** Save composed signals to CSV files, allowing you to load and share them at any time.  
 - **Signal Sampling:** Sample signals and display the sampling frequency in either actual or normalized form (0×fmax to 4×fmax).  
 - **Signal-to-Noise Ratio (SNR):** Control the SNR to introduce noise into signals.  
 - **Signal Reconstruction:** Provide five different signal reconstruction options: Whittaker–Shannon, Lanczos, Cubic Spline, Zero-Order Hold, and First-Order Hold.  
